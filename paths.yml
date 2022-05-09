@@ -1,0 +1,3 @@
+SECRETS_PATH: "./.env/secrets.yml"
+# # dont delete this line
+# INITIALIZED_PATH: "./env/.init"
