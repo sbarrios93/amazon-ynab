@@ -1,14 +1,18 @@
 # type: ignore[attr-defined]
-from typing import Optional
+from typing import Dict, Optional, Union
 
+import pathlib
 from enum import Enum
-from random import choice
 
 import typer
+import yaml
 from rich.console import Console
 
 from amazon_ynab import version
-from amazon_ynab.example import hello
+from amazon_ynab.paths.common_paths import get_paths
+from amazon_ynab.paths.utils import check_if_path_exists
+
+PATHS: dict[str, str] = get_paths()
 
 
 class Color(str, Enum):
@@ -35,17 +39,52 @@ def version_callback(print_version: bool) -> None:
         raise typer.Exit()
 
 
-@app.command(name="")
-def main(
-    name: str = typer.Option(..., help="Person to greet."),
-    color: Optional[Color] = typer.Option(
-        None,
-        "-c",
-        "--color",
-        "--colour",
-        case_sensitive=False,
-        help="Color for print. If not specified then choice will be random.",
+def create_secrets_file(path: Union[str, pathlib.Path]) -> None:
+    # create the secrets file
+    amazon_username = typer.prompt("Amazon email: ")
+    amazon_password = typer.prompt(
+        "Amazon password: ", hide_input=True, confirmation_prompt=True
+    )
+    ynab_token = typer.prompt("YNAB token: ")
+
+    secrets = {
+        "amazon": {
+            "username": amazon_username,
+            "password": amazon_password,
+        },
+        "ynab": {
+            "token": ynab_token,
+        },
+    }
+    # make path if it doesn't exist
+    pathlib.Path(path).parent.mkdir(parents=True, exist_ok=True)
+
+    with open(path, "w", encoding="utf-8") as secrets_file:
+        yaml.dump(secrets, secrets_file)
+
+    return None
+
+
+@app.command("init")
+def init_app(
+    path_to_secrets: str = typer.Option(
+        PATHS["SECRETS_PATH"], "--secrets", "-s", help="Path to secrets file"
     ),
+) -> None:
+    """Initialize the application."""
+    console.print("Initializing the application...")
+
+    # check if file containing the secrets exists
+    if check_if_path_exists(path_to_secrets):
+        console.print("[green]✔[/] Secrets file exists")
+    else:
+        console.print("[red]✘[/] Secrets file does not exist, creating it...")
+        create_secrets_file(path_to_secrets)
+
+
+# add callback so we can access some options without using arguments
+@app.callback()
+def callback(
     print_version: bool = typer.Option(
         None,
         "-v",
@@ -53,14 +92,9 @@ def main(
         callback=version_callback,
         is_eager=True,
         help="Prints the version of the amazon-ynab package.",
-    ),
+    )
 ) -> None:
-    """Print a greeting with a giving name."""
-    if color is None:
-        color = choice(list(Color))
-
-    greeting: str = hello(name)
-    console.print(f"[bold {color}]{greeting}[/]")
+    pass
 
 
 if __name__ == "__main__":
