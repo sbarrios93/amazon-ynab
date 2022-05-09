@@ -2,7 +2,6 @@
 from typing import Dict, Optional, Union
 
 import pathlib
-from enum import Enum
 
 import typer
 import yaml
@@ -13,15 +12,6 @@ from amazon_ynab.paths.common_paths import get_paths
 from amazon_ynab.paths.utils import check_if_path_exists
 
 PATHS: dict[str, str] = get_paths()
-
-
-class Color(str, Enum):
-    white = "white"
-    red = "red"
-    cyan = "cyan"
-    magenta = "magenta"
-    yellow = "yellow"
-    green = "green"
 
 
 app = typer.Typer(
