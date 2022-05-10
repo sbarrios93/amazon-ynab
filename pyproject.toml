@@ -37,6 +37,8 @@ python = "^3.9"
 
 rich = "^12.4.1"
 typer = {extras = ["all"], version = "^0.4.0"}
+selenium = "^4.1.5"
+webdriver-manager = "^3.5.4"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.1"
@@ -58,6 +60,7 @@ pytest-html = "3.1.1"
 pyupgrade = "2.29.1"
 safety = "^1.10.3"
 types-PyYAML = "^6.0.7"
+types-selenium = "^3.141.9"
 
 [tool.black]
 # https://github.com/psf/black
