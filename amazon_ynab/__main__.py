@@ -7,6 +7,7 @@ import yaml
 from rich.console import Console
 
 from amazon_ynab import version
+from amazon_ynab.amazon.amazon_client import AmazonClient
 from amazon_ynab.paths.common_paths import get_paths
 from amazon_ynab.paths.utils import check_if_path_exists
 from amazon_ynab.utils import utils
@@ -62,6 +63,31 @@ def init_app(
             utils.create_secrets_file(path_to_secrets)
 
 
+@app.command("run")
+def run(
+    path_to_secrets: str = typer.Option(
+        PATHS["SECRETS_PATH"], "--secrets", "-s", help="Path to secrets file"
+    )
+) -> None:
+
+    if not check_if_path_exists(path_to_secrets):
+        console.print(
+            "[red]✘[/] Secrets file does not exist, either run the init command or create the secrets file manually. Paths are defined in the paths.yml file."
+        )
+        raise typer.Exit()
+    else:
+        secrets = utils.load_secrets(path_to_secrets)
+
+        # init client
+        amazon_client = AmazonClient(
+            secrets["amazon"]["username"], secrets["amazon"]["password"]
+        )
+
+        amazon_client.start_driver()
+        amazon_client.sign_in()
+        amazon_client.get_raw_transactions()
+
+
 # add callback so we can access some options without using arguments
 @app.callback()
 def callback(
@@ -74,6 +100,7 @@ def callback(
         help="Prints the version of the amazon-ynab package.",
     )
 ) -> None:
+    """Print the version of the package."""
     pass
 
 
