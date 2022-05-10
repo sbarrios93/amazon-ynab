@@ -1,4 +1,3 @@
-# type: ignore[attr-defined]
 """Amazon YNAB is a reconciler that scrapes Amazon orders and adds memo info on each corresponding YNAB transaction"""
 
 import sys
