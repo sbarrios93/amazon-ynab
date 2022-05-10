@@ -14,7 +14,7 @@ from amazon_ynab.paths.utils import check_if_path_exists
 PATHS: dict[str, str] = get_paths()
 
 
-app = typer.Typer(
+app: typer.Typer = typer.Typer(
     name="amazon-ynab",
     help="Amazon YNAB is a reconciler that scrapes Amazon orders and adds memo info on each corresponding YNAB transaction",
     add_completion=False,
