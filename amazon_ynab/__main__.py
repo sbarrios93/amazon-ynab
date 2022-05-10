@@ -52,6 +52,8 @@ def create_secrets_file(path: Union[str, pathlib.Path]) -> None:
     with open(path, "w", encoding="utf-8") as secrets_file:
         yaml.dump(secrets, secrets_file)
 
+    console.print(f"[green]Created secrets file at {path}[/]")
+
     return None
 
 
@@ -60,16 +62,31 @@ def init_app(
     path_to_secrets: str = typer.Option(
         PATHS["SECRETS_PATH"], "--secrets", "-s", help="Path to secrets file"
     ),
+    restart: bool = typer.Option(
+        False, "--restart", help="Force the recreation of the secrets file"
+    ),
 ) -> None:
     """Initialize the application."""
     console.print("Initializing the application...")
 
-    # check if file containing the secrets exists
-    if check_if_path_exists(path_to_secrets):
-        console.print("[green]✔[/] Secrets file exists")
+    if restart:
+        # show warning, prompt user to confirm they want to overwrite the secrets file
+        console.print("[yellow]WARNING[/]")
+        console.print(f"This will overwrite the secrets file at {path_to_secrets}")
+        confirm = typer.confirm("Are you sure you want to overwrite the secrets file?")
+        if confirm:
+            console.print("[green]Overwriting the secrets file...[/]")
+            create_secrets_file(path_to_secrets)
+        else:
+            console.print("[red]Aborting...[/]")
+            raise typer.Exit()
     else:
-        console.print("[red]✘[/] Secrets file does not exist, creating it...")
-        create_secrets_file(path_to_secrets)
+        # check if file containing the secrets exists
+        if check_if_path_exists(path_to_secrets):
+            console.print("[green]✔[/] Secrets file exists")
+        else:
+            console.print("[red]✘[/] Secrets file does not exist, creating it...")
+            create_secrets_file(path_to_secrets)
 
 
 # add callback so we can access some options without using arguments
