@@ -1,4 +1,3 @@
-# type: ignore[attr-defined]
 from typing import Dict, Optional, Union
 
 import pathlib
@@ -10,6 +9,7 @@ from rich.console import Console
 from amazon_ynab import version
 from amazon_ynab.paths.common_paths import get_paths
 from amazon_ynab.paths.utils import check_if_path_exists
+from amazon_ynab.utils import utils
 
 PATHS: dict[str, str] = get_paths()
 
@@ -29,34 +29,6 @@ def version_callback(print_version: bool) -> None:
         raise typer.Exit()
 
 
-def create_secrets_file(path: Union[str, pathlib.Path]) -> None:
-    # create the secrets file
-    amazon_username = typer.prompt("Amazon email: ")
-    amazon_password = typer.prompt(
-        "Amazon password: ", hide_input=True, confirmation_prompt=True
-    )
-    ynab_token = typer.prompt("YNAB token: ")
-
-    secrets = {
-        "amazon": {
-            "username": amazon_username,
-            "password": amazon_password,
-        },
-        "ynab": {
-            "token": ynab_token,
-        },
-    }
-    # make path if it doesn't exist
-    pathlib.Path(path).parent.mkdir(parents=True, exist_ok=True)
-
-    with open(path, "w", encoding="utf-8") as secrets_file:
-        yaml.dump(secrets, secrets_file)
-
-    console.print(f"[green]Created secrets file at {path}[/]")
-
-    return None
-
-
 @app.command("init")
 def init_app(
     path_to_secrets: str = typer.Option(
@@ -71,12 +43,13 @@ def init_app(
 
     if restart:
         # show warning, prompt user to confirm they want to overwrite the secrets file
-        console.print("[yellow]WARNING[/]")
-        console.print(f"This will overwrite the secrets file at {path_to_secrets}")
+        console.print(
+            f"[yellow]WARNING:[/] This will overwrite the secrets file at {path_to_secrets}"
+        )
         confirm = typer.confirm("Are you sure you want to overwrite the secrets file?")
         if confirm:
-            console.print("[green]Overwriting the secrets file...[/]")
-            create_secrets_file(path_to_secrets)
+            console.print("[yellow]Overwriting the secrets file...[/]")
+            utils.create_secrets_file(path_to_secrets)
         else:
             console.print("[red]Aborting...[/]")
             raise typer.Exit()
@@ -86,7 +59,7 @@ def init_app(
             console.print("[green]✔[/] Secrets file exists")
         else:
             console.print("[red]✘[/] Secrets file does not exist, creating it...")
-            create_secrets_file(path_to_secrets)
+            utils.create_secrets_file(path_to_secrets)
 
 
 # add callback so we can access some options without using arguments
