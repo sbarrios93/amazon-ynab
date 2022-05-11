@@ -1,7 +1,11 @@
+from typing import Union
+
 import time
 from datetime import datetime, timedelta
+from random import randint
 
 from rich.console import Console
+from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn, TimeElapsedColumn
 from selenium.common.exceptions import (
     ElementNotSelectableException,
     ElementNotVisibleException,
@@ -13,6 +17,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
+from amazon_ynab.amazon.invoice_parser import TransactionInvoice
+
 
 class AmazonClient:
     def __init__(
@@ -23,6 +29,7 @@ class AmazonClient:
         days_back: int = 30,
         today_inclusive: bool = False,
     ):
+        # TODO: check if anything different is needed for running on raspberry pi, jetson nano
 
         self.user_email = user_email
         self.user_password = user_password
@@ -39,13 +46,17 @@ class AmazonClient:
 
         self.raw_transaction_data: list[str] = []
 
-        # TODO: check if anything different is needed for running on raspberry pi, jetson nano
+        self.transactions: dict[str, dict[str, Union[str, float]]] = {}
+
         self.urls: dict[str, str] = {
             "homepage": "https://amazon.com",
             "transactions": "https://www.amazon.com/cpe/yourpayments/transactions",
+            "invoice": "https://www.amazon.com/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o00?ie=UTF8&orderID={}",
         }
 
-    def start_driver(self) -> None:
+        self.invoices: dict[str, TransactionInvoice] = {}
+
+    def _start_driver(self) -> None:
 
         Console().print("Starting driver...")
 
@@ -67,13 +78,15 @@ class AmazonClient:
         )
         Console().print("[green]Driver created[/]")
 
-    def sign_in(self) -> None:
-        self.driver.get(self.urls["homepage"])
+    def _sign_in(self) -> None:
+        self.driver.get(self.urls["transactions"])
 
-        signin_elem = self.wait_driver.until(
-            EC.element_to_be_clickable((By.XPATH, "//a[@data-nav-role ='signin']"))
-        )
-        signin_elem.click()
+        # TODO: delete this commented block
+        # signin_elem = self.wait_driver.until(
+        #     EC.element_to_be_clickable((By.XPATH, "//a[@data-nav-role ='signin']"))
+        # )
+        # signin_elem.click()
+        # time.sleep(1)
 
         email_elem = self.wait_driver.until(
             EC.element_to_be_clickable((By.ID, "ap_email"))
@@ -92,7 +105,7 @@ class AmazonClient:
 
         time.sleep(2)
 
-    def get_raw_transactions(self) -> None:
+    def _get_raw_transactions(self) -> None:
 
         self.driver.get(self.urls["transactions"])
 
@@ -144,4 +157,57 @@ class AmazonClient:
                 pagination_elem.click()
                 time.sleep(4)
 
-        print(self.raw_transaction_data)
+    def _transaction_to_dict(
+        self, transaction: list[str]
+    ) -> tuple[str, dict[str, Union[str, float]]]:
+
+        payment_type: str = (
+            "Gift Card" if "Gift Card" in transaction[0] else "Credit Card"
+        )
+        amount: float = float(transaction[1].replace("$", "").replace(",", ""))
+        order_number: str = transaction[2].split(" ")[-1].replace("#", "")
+
+        return order_number, {"payment_type": payment_type, "amount": amount}
+
+    def _parse_raw_transactions(self) -> None:
+
+        transactions: list[list[str]] = [
+            tx.split("\n") for tx in self.raw_transaction_data
+        ]
+
+        self.transactions = dict(
+            map(lambda tx: self._transaction_to_dict(tx), transactions)
+        )
+
+    def _get_invoice_page(self, order_number: str) -> str:
+        self.driver.get(self.urls["invoice"].format(order_number))
+        time.sleep(randint(50, 200) / 100.0)
+        return self.driver.page_source
+
+    def _process_invoices(self) -> None:
+
+        with Progress(
+            SpinnerColumn(),
+            *Progress.get_default_columns(),
+            MofNCompleteColumn(),
+            TimeElapsedColumn(),
+            transient=True,
+        ) as progress:
+            processing_tasks = progress.add_task(
+                "[green]Processing Invoices[/]", total=len(list(self.transactions))
+            )
+
+            for order_number in self.transactions.keys():
+                progress.print(f"[green]{order_number}[/]")
+                invoice_page = self._get_invoice_page(order_number)
+                self.invoices[order_number] = TransactionInvoice(
+                    order_number, invoice_page
+                )
+                progress.update(processing_tasks, advance=1)
+
+    def run_pipeline(self) -> None:
+        self._start_driver()
+        self._sign_in()
+        self._get_raw_transactions()
+        self._parse_raw_transactions()
+        self._process_invoices()

@@ -67,7 +67,16 @@ def init_app(
 def run(
     path_to_secrets: str = typer.Option(
         PATHS["SECRETS_PATH"], "--secrets", "-s", help="Path to secrets file"
-    )
+    ),
+    headless: bool = typer.Option(
+        False, "--headless", "-h", help="Run selenium in headless mode"
+    ),
+    days_back: int = typer.Option(
+        30, "--days-back", "-d", help="Number of days back to scrape"
+    ),
+    today_inclusive: bool = typer.Option(
+        False, "--today-inclusive", "-t", help="Include today in the scrape"
+    ),
 ) -> None:
 
     if not check_if_path_exists(path_to_secrets):
@@ -76,16 +85,18 @@ def run(
         )
         raise typer.Exit()
     else:
-        secrets = utils.load_secrets(path_to_secrets)
+        secrets: dict[str, dict[str, str]] = utils.load_secrets(path_to_secrets)
 
         # init client
         amazon_client = AmazonClient(
-            secrets["amazon"]["username"], secrets["amazon"]["password"]
+            secrets["amazon"]["username"],
+            secrets["amazon"]["password"],
+            run_headless=headless,
+            days_back=days_back,
+            today_inclusive=today_inclusive,
         )
 
-        amazon_client.start_driver()
-        amazon_client.sign_in()
-        amazon_client.get_raw_transactions()
+        amazon_client.run_pipeline()
 
 
 # add callback so we can access some options without using arguments
