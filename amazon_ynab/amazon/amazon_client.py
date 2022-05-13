@@ -159,7 +159,7 @@ class AmazonClient:
 
     def _transaction_to_dict(
         self, transaction: list[str]
-    ) -> tuple[str, dict[str, Union[str, float]]]:
+    ) -> tuple[str, dict[str, Union[str, float, bool]]]:
 
         payment_type: str = (
             "Gift Card" if "Gift Card" in transaction[0] else "Credit Card"
@@ -167,7 +167,12 @@ class AmazonClient:
         amount: float = float(transaction[1].replace("$", "").replace(",", ""))
         order_number: str = transaction[2].split(" ")[-1].replace("#", "")
 
-        return order_number, {"payment_type": payment_type, "amount": amount}
+        if transaction[-1].split()[-1].lower() == "tips":
+            is_tip: bool = True
+        else:
+            is_tip = False
+
+        return order_number, {"payments": {payment_type: amount}, "is_tip": is_tip}
 
     def _parse_raw_transactions(self) -> None:
 
@@ -175,9 +180,22 @@ class AmazonClient:
             tx.split("\n") for tx in self.raw_transaction_data
         ]
 
-        self.transactions = dict(
-            map(lambda tx: self._transaction_to_dict(tx), transactions)
-        )
+        transactions_dict: dict[str, dict[str, Union[str, float, bool]]] = {}
+
+        for transaction in transactions:
+            order_number, order_info = self._transaction_to_dict(transaction)
+            if order_info["is_tip"]:  # dont parse tip orders
+                pass
+            else:
+                # some transactions can be paid with more than one type of payment type, lets look if the order number already exists, meaning that there are multiple entries for the same order, if not, then add a new entry
+                if self.transactions.get(order_number, None) is None:
+                    self.transactions[order_number] = order_info
+                else:
+                    self.transactions[order_number]["payments"].update(
+                        order_info["payments"]
+                    )
+
+        Console().print(f"[blue]Found {len(self.transactions)} transactions[/]")
 
     def _get_invoice_page(self, order_number: str) -> str:
         self.driver.get(self.urls["invoice"].format(order_number))
@@ -197,12 +215,44 @@ class AmazonClient:
                 "[green]Processing Invoices[/]", total=len(list(self.transactions))
             )
 
-            for order_number in self.transactions.keys():
-                progress.print(f"[green]{order_number}[/]")
-                invoice_page = self._get_invoice_page(order_number)
-                self.invoices[order_number] = TransactionInvoice(
-                    order_number, invoice_page
-                )
+            for order_number in self.transactions:
+                # dont parse amazon transactions that are not products
+                # this could be an amazon prime payment or other type of payment
+                # this order ids usually start with a letter instead of a number
+
+                if order_number[0].isalpha():
+                    progress.print(
+                        f"[yellow]{order_number} is not a product[/]...skipping"
+                    )
+                else:
+                    progress.print(f"[green]{order_number}[/]")
+                    # we only care about what we paid with credit/debit card, not with gift card
+                    if (
+                        self.transactions[order_number]["payments"].get(
+                            "Credit Card", None
+                        )
+                        is not None
+                    ):
+                        invoice_page = self._get_invoice_page(order_number)
+                        self.invoices[order_number] = TransactionInvoice(
+                            order_number,
+                            invoice_page,
+                            force_amount=self.transactions[order_number]["payments"][
+                                "Credit Card"
+                            ],
+                        )
+                    else:
+                        progress.print(
+                            f"[yellow]{order_number} is not a credit card transaction[/]"
+                        )
+                        for payment_type, amount in self.transactions[order_number][
+                            "payments"
+                        ].items():
+                            if amount is not None:
+                                progress.print(
+                                    f"[yellow]Order got a {payment_type} payment of {amount}[/]"
+                                )
+
                 progress.update(processing_tasks, advance=1)
 
     def run_pipeline(self) -> None:
