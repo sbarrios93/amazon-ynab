@@ -1,5 +1,3 @@
-from typing import Union
-
 import time
 from datetime import datetime, timedelta
 from random import randint
@@ -18,6 +16,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from amazon_ynab.amazon.invoice_parser import TransactionInvoice
+from amazon_ynab.utils.custom_types import InnerTransactionsDict
 
 
 class AmazonClient:
@@ -25,9 +24,11 @@ class AmazonClient:
         self,
         user_email: str,
         user_password: str,
-        run_headless: bool = False,
-        days_back: int = 30,
-        today_inclusive: bool = False,
+        run_headless: bool,
+        days_back: int,
+        today_inclusive: bool,
+        short_items: bool,
+        words_per_item: int,
     ):
         # TODO: check if anything different is needed for running on raspberry pi, jetson nano
 
@@ -36,6 +37,8 @@ class AmazonClient:
         self.run_headless = run_headless
         self.days_back = days_back
         self.today_inclusive = today_inclusive
+        self.short_items = short_items
+        self.words_per_item = words_per_item
 
         if today_inclusive:
             self.cutoff_date: datetime = datetime.today() - timedelta(
@@ -46,7 +49,7 @@ class AmazonClient:
 
         self.raw_transaction_data: list[str] = []
 
-        self.transactions: dict[str, dict[str, Union[str, float]]] = {}
+        self.transactions: dict[str, InnerTransactionsDict] = {}
 
         self.urls: dict[str, str] = {
             "homepage": "https://amazon.com",
@@ -159,7 +162,7 @@ class AmazonClient:
 
     def _transaction_to_dict(
         self, transaction: list[str]
-    ) -> tuple[str, dict[str, Union[str, float, bool]]]:
+    ) -> tuple[str, InnerTransactionsDict]:
 
         payment_type: str = (
             "Gift Card" if "Gift Card" in transaction[0] else "Credit Card"
@@ -180,14 +183,13 @@ class AmazonClient:
             tx.split("\n") for tx in self.raw_transaction_data
         ]
 
-        transactions_dict: dict[str, dict[str, Union[str, float, bool]]] = {}
-
         for transaction in transactions:
             order_number, order_info = self._transaction_to_dict(transaction)
             if order_info["is_tip"]:  # dont parse tip orders
                 pass
             else:
-                # some transactions can be paid with more than one type of payment type, lets look if the order number already exists, meaning that there are multiple entries for the same order, if not, then add a new entry
+                # some transactions can be paid with more than one type of payment type, lets look if the order number
+                # already exists, meaning that there are multiple entries for the same order, if not, then add a new entry
                 if self.transactions.get(order_number, None) is None:
                     self.transactions[order_number] = order_info
                 else:
@@ -240,6 +242,8 @@ class AmazonClient:
                             force_amount=self.transactions[order_number]["payments"][
                                 "Credit Card"
                             ],
+                            short_items=self.short_items,
+                            words_per_item=self.words_per_item,
                         )
                     else:
                         progress.print(

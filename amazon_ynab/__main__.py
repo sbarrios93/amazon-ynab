@@ -1,4 +1,4 @@
-from typing import Dict, Optional, Union
+from typing import Optional, Union
 
 import pathlib
 
@@ -77,6 +77,15 @@ def run(
     today_inclusive: bool = typer.Option(
         False, "--today-inclusive", "-t", help="Include today in the scrape"
     ),
+    short_items: bool = typer.Option(
+        False, "--short-items", "-s", help="Shorten item names to fit in YNAB"
+    ),
+    words_per_item: int = typer.Option(
+        6,
+        "--words-per-item",
+        "-w",
+        help="Number of words to show per item [Only used when --short-items is set]",
+    ),
 ) -> None:
 
     if not check_if_path_exists(path_to_secrets):
@@ -94,9 +103,12 @@ def run(
             run_headless=headless,
             days_back=days_back,
             today_inclusive=today_inclusive,
+            short_items=short_items,
+            words_per_item=words_per_item,
         )
 
         amazon_client.run_pipeline()
+        print("timestop")
 
 
 # add callback so we can access some options without using arguments

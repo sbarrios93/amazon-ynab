@@ -12,6 +12,9 @@ from datetime import datetime
 import bs4
 from bs4 import BeautifulSoup as bs
 
+from amazon_ynab.utils.utils import not_none
+from amazon_ynab.words.string_modifier import shorten_string
+
 # from amazon_ynab.amazon.product_summarizer import shorten_string
 
 
@@ -20,19 +23,23 @@ class TransactionInvoice:
         self,
         invoice_number: str,
         transaction_page: str,
-        force_amount: Union[float, None] = None,
+        force_amount: float | None,
+        short_items: bool,
+        words_per_item: int,
     ):
         self.invoice_number = invoice_number
         self.transaction_page = transaction_page
         self.total_amount_paid = force_amount
+        self.short_items = short_items
+        self.words_per_item = words_per_item
 
         self.item_list: list[str] = []
         self.item_tuples: list[tuple[str, float]] = []
-        self.pre_tax_total: Union[float, None] = None
-        self.after_tax_total: Union[float, None] = None
-        self.tax_total: Union[float, None] = None
-        self.tax_rate: Union[float, None] = None
-        self.payment_date: Union[datetime, None] = None
+        self.pre_tax_total: float | None = None
+        self.after_tax_total: float | None = None
+        self.tax_total: float | None = None
+        self.tax_rate: float | None = None
+        self.payment_date: datetime | None = None
 
         self._parsed_as_soup: bs4.BeautifulSoup = bs(
             self.transaction_page, "html.parser"
@@ -50,17 +57,26 @@ class TransactionInvoice:
             item_name = item.text
             item_value = float(item.parent.parent.findAll("td")[1].text.strip()[1:])
             self.item_tuples.append((item_name, item_value * num_items))
-            self.item_list.append(item_name)
+
+        if self.short_items:
+            self.item_list = list(
+                map(
+                    lambda x: shorten_string(x[0], self.words_per_item),
+                    self.item_tuples,
+                )
+            )
 
     def _parse_pre_tax_total(self) -> None:
 
         search_by = re.compile("Total before tax")
 
-        pre_tax_total_element = (
-            self._parsed_as_soup.find(text=search_by)
-            .parent.parent.findAll("td")[1]
-            .text.strip()
-        )
+        pre_tax_total_element = not_none(
+            not_none(
+                not_none(
+                    not_none(self._parsed_as_soup.find(text=search_by)).parent
+                ).parent
+            ).findAll("td")
+        )[1].text.strip()
 
         pre_tax_total_value = float(
             pre_tax_total_element.replace("$", "").replace(",", "")
@@ -71,11 +87,13 @@ class TransactionInvoice:
     def _parse_tax_total(self) -> None:
         search_by = re.compile(r"Estimated tax to be collected")
 
-        tax_total_element = (
-            self._parsed_as_soup.find(text=search_by)
-            .parent.parent.findAll("td")[1]
-            .text.strip()
-        )
+        tax_total_element = not_none(
+            not_none(
+                not_none(
+                    not_none(self._parsed_as_soup.find(text=search_by)).parent
+                ).parent
+            ).findAll("td")
+        )[1].text.strip()
 
         tax_total_value = float(tax_total_element.replace("$", "").replace(",", ""))
 
@@ -85,11 +103,13 @@ class TransactionInvoice:
 
         search_by = re.compile(r"Estimated tax to be collected")
 
-        tax_total_element = (
-            self._parsed_as_soup.find(text=search_by)
-            .parent.parent.findAll("td")[1]
-            .text.strip()
-        )
+        tax_total_element = not_none(
+            not_none(
+                not_none(
+                    not_none(self._parsed_as_soup.find(text=search_by)).parent
+                ).parent
+            ).findAll("td")
+        )[1].text.strip()
 
         tax_total_value = float(tax_total_element.replace("$", "").replace(",", ""))
 
@@ -105,11 +125,17 @@ class TransactionInvoice:
         search_by = re.compile(r"Credit Card transactions")
 
         # this is a little bit hacky, but when we have more than one transaction, we want the one that matches the payment we have from self.total_amount_paid. To do this, I look for that value on the credit card transactions of the invoice, and then the <td> elemenet before that contains the date
-        search_in_block = (
-            self._parsed_as_soup.find(text=search_by)
-            .parent.parent.parent.parent.findAll("td")[1]
-            .findAll("td")
-        )
+        search_in_block = not_none(
+            not_none(
+                not_none(
+                    not_none(
+                        not_none(
+                            not_none(self._parsed_as_soup.find(text=search_by)).parent
+                        ).parent
+                    ).parent
+                ).parent
+            ).findAll("td")
+        )[1].findAll("td")
 
         for ix, text_ in enumerate(search_in_block):
             text_ = (
@@ -117,7 +143,7 @@ class TransactionInvoice:
             )  # this is to clean the potential amount paid
             try:
                 if float(text_) == abs(
-                    self.total_amount_paid
+                    not_none(self.total_amount_paid)
                 ):  # self.total_amount_paid is negative
                     date_string: str = (
                         search_in_block[ix - 1].text.strip().split(":")[1].strip()

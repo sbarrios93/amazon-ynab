@@ -367,8 +367,8 @@ We use [`Release Drafter`](https://github.com/marketplace/actions/release-drafte
 
 ### List of labels and corresponding titles
 
-|               **Label**               |  **Title in Releases**  |
-| :-----------------------------------: | :---------------------: |
+|               **Label**               | **Title in Releases**  |
+| :-----------------------------------: | :--------------------: |
 |       `enhancement`, `feature`        |       🚀 Features       |
 | `bug`, `refactoring`, `bugfix`, `fix` | 🔧 Fixes & Refactoring  |
 |       `build`, `ci`, `testing`        | 📦 Build System & CI/CD |
