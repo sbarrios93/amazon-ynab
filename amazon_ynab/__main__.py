@@ -1,9 +1,4 @@
-from typing import Optional, Union
-
-import pathlib
-
 import typer
-import yaml
 from rich.console import Console
 
 from amazon_ynab import version
@@ -64,7 +59,7 @@ def init_app(
 
 
 @app.command("run")
-def run(
+def run(  # noqa
     path_to_secrets: str = typer.Option(
         PATHS["SECRETS_PATH"], "--secrets", "-s", help="Path to secrets file"
     ),
@@ -93,28 +88,28 @@ def run(
             "[red]✘[/] Secrets file does not exist, either run the init command or create the secrets file manually. Paths are defined in the paths.yml file."
         )
         raise typer.Exit()
-    else:
-        secrets: dict[str, dict[str, str]] = utils.load_secrets(path_to_secrets)
 
-        # init client
-        amazon_client = AmazonClient(
-            secrets["amazon"]["username"],
-            secrets["amazon"]["password"],
-            run_headless=headless,
-            days_back=days_back,
-            today_inclusive=today_inclusive,
-            short_items=short_items,
-            words_per_item=words_per_item,
-        )
+    secrets: dict[str, dict[str, str]] = utils.load_secrets(path_to_secrets)
 
-        amazon_client.run_pipeline()
-        print("timestop")
+    # init client
+    amazon_client = AmazonClient(
+        secrets["amazon"]["username"],
+        secrets["amazon"]["password"],
+        run_headless=headless,
+        days_back=days_back,
+        today_inclusive=today_inclusive,
+        short_items=short_items,
+        words_per_item=words_per_item,
+    )
+
+    amazon_client.run_pipeline()
+    print("timestop")
 
 
 # add callback so we can access some options without using arguments
 @app.callback()
 def callback(
-    print_version: bool = typer.Option(
+    print_version: bool = typer.Option(  # noqa
         None,
         "-v",
         "--version",
@@ -124,7 +119,7 @@ def callback(
     )
 ) -> None:
     """Print the version of the package."""
-    pass
+    pass  # noqa
 
 
 if __name__ == "__main__":
