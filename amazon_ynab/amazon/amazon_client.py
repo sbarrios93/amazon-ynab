@@ -69,7 +69,7 @@ class AmazonClient:
         self.driver = Chrome(ChromeDriverManager().install(), options=options)
         self.wait_driver = WebDriverWait(
             self.driver,
-            10,
+            30,
             poll_frequency=2,
             ignored_exceptions=[
                 ElementNotVisibleException,
