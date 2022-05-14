@@ -141,7 +141,10 @@ class AmazonClient:
 
             if min(transaction_dates) < self.cutoff_date:
                 inside_time_frame = False
-            else:  # if the last transaction is not older than the cutoff date, we need to click the next button
+            else:  # if the last transaction is not older than the cutoff date, we need to click the next button unless is the last page
+                if "end of the line" in self.driver.page_source:
+                    break
+
                 pagination_elem = self.wait_driver.until(
                     EC.element_to_be_clickable(
                         (
@@ -152,7 +155,7 @@ class AmazonClient:
                 )
 
                 pagination_elem.click()
-                time.sleep(4)
+                time.sleep(randint(200, 350) / 100.0)
 
     def _transaction_to_dict(
         self, transaction: list[str]

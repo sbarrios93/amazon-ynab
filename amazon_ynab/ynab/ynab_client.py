@@ -1,5 +1,6 @@
 from typing import Any
 
+import json
 import re
 from datetime import datetime
 
@@ -25,6 +26,7 @@ class YNABClient:
 
         self.request_headers: dict[str, str] = {
             "Authorization": f"Bearer {self.token}",
+            "accept": "application/json",
         }
 
         self.all_budgets: dict[str, str] = {}
@@ -106,7 +108,7 @@ class YNABClient:
 
         return filtered_transactions
 
-    def _parse_filtered_transactions(self) -> None:
+    def parse_transactions(self) -> None:
         """
         Parses the transactions.
         """
@@ -116,7 +118,7 @@ class YNABClient:
 
             # lets isolate the tip transactions
             if search_by.match(transaction["payee_name"]):
-                self.tip_transactions[transaction["id"]] = {  # type: ignore
+                self.tip_transactions[transaction["id"]] = {
                     "amount": transaction["amount"],
                     "date": datetime.strptime(transaction["date"], "%Y-%m-%d").date(),
                     "payee": transaction["payee_name"],
@@ -124,9 +126,24 @@ class YNABClient:
                 }
 
             else:
-                self.transactions_to_match[transaction["id"]] = {  # type: ignore
+                self.transactions_to_match[transaction["id"]] = {
                     "amount": transaction["amount"],
                     "date": datetime.strptime(transaction["date"], "%Y-%m-%d").date(),
                     "payee": transaction["payee_name"],
                     "memo": transaction["memo"],
                 }
+
+    def bulk_patch_transactions(self, transactions: list[dict[str, Any]]) -> None:
+        data = json.dumps({"transactions": transactions})
+
+        self.request_headers.update({"Content-Type": "application/json"})
+
+        resp = requests.patch(
+            self.urls["transactions"].format(self.selected_budget),
+            data=data,
+            headers=self.request_headers,
+        )
+        if resp.status_code != 200:
+            print(f"Something went wrong, got response: {resp.content}")
+        else:
+            print(f"Successfully updated transactions {transactions}")

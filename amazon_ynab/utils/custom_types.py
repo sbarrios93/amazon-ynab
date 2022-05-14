@@ -23,3 +23,5 @@ class YNABInnerTransactionsDict(TypedDict):
 
 
 YNABTransactionsDict = dict[str, YNABInnerTransactionsDict]
+
+MatchedTransactionsList = list[tuple[str, str]]

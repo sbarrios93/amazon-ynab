@@ -1,6 +1,10 @@
 from datetime import timedelta
 
-from amazon_ynab.utils.custom_types import AmazonInvoicesDict, YNABTransactionsDict
+from amazon_ynab.utils.custom_types import (
+    AmazonInvoicesDict,
+    MatchedTransactionsList,
+    YNABTransactionsDict,
+)
 
 
 def match_transactions(
@@ -9,7 +13,7 @@ def match_transactions(
     ynab_amount_multiplier: int = 1_000,
     timedelta_lower_bound: int = 0,
     timedelta_upper_bound: int = 5,
-) -> list[tuple[str, str]]:
+) -> MatchedTransactionsList:
     """
     Matches the transactions between amazon and ynab.
     """
