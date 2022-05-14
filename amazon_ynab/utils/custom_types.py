@@ -1,6 +1,9 @@
-from typing import TypedDict
+from typing import TypedDict, TypeVar
 
 
-class InnerTransactionsDict(TypedDict):
+class AmazonInnerTransactionsDict(TypedDict):
     payments: dict[str, float]
     is_tip: bool
+
+
+AmazonTransactionsDict = dict[str, AmazonInnerTransactionsDict]
