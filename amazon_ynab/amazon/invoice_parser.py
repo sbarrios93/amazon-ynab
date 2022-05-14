@@ -7,7 +7,7 @@ https://github.com/davidz627/AmazonSyncForYNAB/
 from typing import Union
 
 import re
-from datetime import datetime
+from datetime import date, datetime
 
 import bs4
 from bs4 import BeautifulSoup as bs
@@ -39,7 +39,7 @@ class TransactionInvoice:
         self.after_tax_total: float | None = None
         self.tax_total: float | None = None
         self.tax_rate: float | None = None
-        self.payment_date: datetime | None = None
+        self.payment_date: date | None = None
 
         self._parsed_as_soup: bs4.BeautifulSoup = bs(
             self.transaction_page, "html.parser"
@@ -65,6 +65,8 @@ class TransactionInvoice:
                     self.item_tuples,
                 )
             )
+        else:
+            self.item_list = list(map(lambda x: x[0], self.item_tuples))
 
     def _parse_pre_tax_total(self) -> None:
 
@@ -149,7 +151,9 @@ class TransactionInvoice:
                         search_in_block[ix - 1].text.strip().split(":")[1].strip()
                     )
 
-                    self.payment_date = datetime.strptime(date_string, "%B %d, %Y")
+                    self.payment_date = datetime.strptime(
+                        date_string, "%B %d, %Y"
+                    ).date()
             except ValueError:
                 pass
 

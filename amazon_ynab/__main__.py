@@ -5,6 +5,7 @@ from rich.console import Console
 
 from amazon_ynab import version
 from amazon_ynab.amazon.amazon_client import AmazonClient
+from amazon_ynab.matcher.matcher import match_transactions
 from amazon_ynab.paths.common_paths import get_paths
 from amazon_ynab.paths.utils import check_if_path_exists
 from amazon_ynab.utils import utils
@@ -147,9 +148,11 @@ def run(  # noqa
         ynab_client.prompt_user_for_budget_id()
 
         ynab_client.selected_budget = secrets["ynab"]["budget_id"]
-    # for budget_name, budget_id in ynab_client.all_budgets.items():
+    ynab_client._parse_filtered_transactions()
 
     print("timestop")
+
+    match_transactions(amazon_client.invoices, ynab_client.transactions_to_match)
 
 
 # add callback so we can access some options without using arguments

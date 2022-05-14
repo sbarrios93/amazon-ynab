@@ -18,6 +18,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from amazon_ynab.amazon.invoice_parser import TransactionInvoice
 from amazon_ynab.utils.custom_types import (
     AmazonInnerTransactionsDict,
+    AmazonInvoicesDict,
     AmazonTransactionsDict,
 )
 
@@ -50,7 +51,7 @@ class AmazonClient:
             "invoice": "https://www.amazon.com/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o00?ie=UTF8&orderID={}",
         }
 
-        self.invoices: dict[str, TransactionInvoice] = {}
+        self.invoices: AmazonInvoicesDict = {}
 
     def _start_driver(self) -> None:
 

@@ -9,6 +9,8 @@ from rich.markdown import Markdown
 from rich.prompt import Prompt
 from rich.rule import Rule
 
+from amazon_ynab.utils.custom_types import YNABTransactionsDict
+
 
 class YNABClient:
     def __init__(self, token: str, since_date: datetime) -> None:
@@ -28,7 +30,9 @@ class YNABClient:
         self.all_budgets: dict[str, str] = {}
         self.selected_budget: str | None = None  # budget id in the API
 
-        self.transactions_to_match: dict[str, Any] = {}
+        self.transactions_to_match: YNABTransactionsDict = {}
+
+        self.tip_transactions: YNABTransactionsDict = {}
 
     def _get_budgets(self) -> Any:
         """
@@ -92,7 +96,7 @@ class YNABClient:
         Filters transactions by date.
         """
 
-        search_by = re.compile(r"^.*[[aA]mazon|AMZN].*$")
+        search_by = re.compile(r"^.*[[aA]mazon|AMZN].*$", re.IGNORECASE)
 
         filtered_transactions = filter(
             lambda item: search_by.match(item["payee_name"])
@@ -102,15 +106,27 @@ class YNABClient:
 
         return filtered_transactions
 
-    def _parse_filtered_transactions(self, filtered_transactions: Any) -> None:
+    def _parse_filtered_transactions(self) -> None:
         """
         Parses the transactions.
         """
-        for transaction in filtered_transactions:
-            self.transactions_to_match[transaction["id"]] = {
-                "amount": transaction["amount"],
-                "date": datetime.strptime(transaction["date"], "%Y-%m-%d").date(),
-                "payee": transaction["payee_name"],
-                "memo": transaction["memo"],
-            }
-            print(self.transactions_to_match[transaction["id"]])
+        search_by = re.compile(r"^.*Tips.*$", re.IGNORECASE)
+
+        for transaction in self._filter_transactions(self._get_transactions()):
+
+            # lets isolate the tip transactions
+            if search_by.match(transaction["payee_name"]):
+                self.tip_transactions[transaction["id"]] = {  # type: ignore
+                    "amount": transaction["amount"],
+                    "date": datetime.strptime(transaction["date"], "%Y-%m-%d").date(),
+                    "payee": transaction["payee_name"],
+                    "memo": transaction["memo"],
+                }
+
+            else:
+                self.transactions_to_match[transaction["id"]] = {  # type: ignore
+                    "amount": transaction["amount"],
+                    "date": datetime.strptime(transaction["date"], "%Y-%m-%d").date(),
+                    "payee": transaction["payee_name"],
+                    "memo": transaction["memo"],
+                }
