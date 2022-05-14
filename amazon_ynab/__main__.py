@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import typer
 from rich.console import Console
 
@@ -6,6 +8,7 @@ from amazon_ynab.amazon.amazon_client import AmazonClient
 from amazon_ynab.paths.common_paths import get_paths
 from amazon_ynab.paths.utils import check_if_path_exists
 from amazon_ynab.utils import utils
+from amazon_ynab.ynab.ynab_client import YNABClient
 
 PATHS: dict[str, str] = get_paths()
 
@@ -91,18 +94,61 @@ def run(  # noqa
 
     secrets: dict[str, dict[str, str]] = utils.load_secrets(path_to_secrets)
 
+    # parse days back to a datetime date
+    cutoff_date: datetime = utils.days_back_to_cutoff_date(days_back)
+
     # init client
     amazon_client = AmazonClient(
-        secrets["amazon"]["username"],
-        secrets["amazon"]["password"],
+        user_credentials=(secrets["amazon"]["username"], secrets["amazon"]["password"]),
         run_headless=headless,
-        days_back=days_back,
-        today_inclusive=today_inclusive,
+        cutoff_date=cutoff_date,
         short_items=short_items,
         words_per_item=words_per_item,
     )
 
-    amazon_client.run_pipeline()
+    # amazon_client.run_pipeline()
+
+    ynab_client = YNABClient(secrets["ynab"]["token"], cutoff_date)
+
+    # prepare the YNAB Client to be used. First call the YNAB Client read the budgets.
+    ynab_client.prepare_client()
+
+    # if there is an entry on the secrets file that has a budget id
+    # we can use that one as long as it is contained in the budgets
+    if secrets["ynab"]["budget_id"]:
+        budget_matched = False
+        for _, budget_id in ynab_client.all_budgets.items():
+            if budget_id == secrets["ynab"]["budget_id"]:
+                ynab_client.selected_budget = budget_id
+                budget_matched = True
+                console.print(
+                    f"[green]✔[/] Budget ID matched: {ynab_client.selected_budget}"
+                )
+                break
+        if not budget_matched:
+            console.print(
+                "[red]✘[/] Budget ID found on secrets file, but it is not in the YNAB budgets list, if you want to use a specific budget id, please add it to the secrets file. You can also set it to null on the secrets file and the program will prompt you for a budget id."
+            )
+            raise typer.Exit()
+    elif len(ynab_client.all_budgets) == 1:
+        # if we only have one budget and no budget id, we can use that one
+
+        console.print(
+            f"[yellow]WARNING:[/] No budget ID found on secrets file, using the only budget ID found: {list(ynab_client.all_budgets.keys())[0]}"
+        )
+        ynab_client.selected_budget = ynab_client.all_budgets[
+            list(ynab_client.all_budgets.keys())[0]
+        ]
+    else:
+        # if no budget id is found in the secrets file, and there is more than one budget prompt the user to select one
+        console.print(
+            "[yellow]No budget ID found in secrets file, please select one[/]"
+        )
+        ynab_client.prompt_user_for_budget_id()
+
+        ynab_client.selected_budget = secrets["ynab"]["budget_id"]
+    # for budget_name, budget_id in ynab_client.all_budgets.items():
+
     print("timestop")
 
 
