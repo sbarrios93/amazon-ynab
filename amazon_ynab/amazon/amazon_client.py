@@ -1,5 +1,5 @@
 import time
-from datetime import datetime, timedelta
+from datetime import datetime
 from random import randint
 
 from rich.console import Console
@@ -16,40 +16,33 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from amazon_ynab.amazon.invoice_parser import TransactionInvoice
-from amazon_ynab.utils.custom_types import InnerTransactionsDict
+from amazon_ynab.utils.custom_types import (
+    AmazonInnerTransactionsDict,
+    AmazonTransactionsDict,
+)
 
 
 class AmazonClient:
     def __init__(
         self,
-        user_email: str,
-        user_password: str,
+        user_credentials: tuple[str, str],
         run_headless: bool,
-        days_back: int,
-        today_inclusive: bool,
+        cutoff_date: datetime,
         short_items: bool,
         words_per_item: int,
-    ):
+    ):  # noqa
         # TODO: check if anything different is needed for running on raspberry pi, jetson nano
 
-        self.user_email = user_email
-        self.user_password = user_password
+        self.user_email = user_credentials[0]
+        self.user_password = user_credentials[1]
         self.run_headless = run_headless
-        self.days_back = days_back
-        self.today_inclusive = today_inclusive
+        self.cutoff_date = cutoff_date
         self.short_items = short_items
         self.words_per_item = words_per_item
 
-        if today_inclusive:
-            self.cutoff_date: datetime = datetime.today() - timedelta(
-                days=self.days_back + 1
-            )
-        else:
-            self.cutoff_date = datetime.today() - timedelta(days=self.days_back)
-
         self.raw_transaction_data: list[str] = []
 
-        self.transactions: dict[str, InnerTransactionsDict] = {}
+        self.transactions: AmazonTransactionsDict = {}
 
         self.urls: dict[str, str] = {
             "homepage": "https://amazon.com",
@@ -162,7 +155,7 @@ class AmazonClient:
 
     def _transaction_to_dict(
         self, transaction: list[str]
-    ) -> tuple[str, InnerTransactionsDict]:
+    ) -> tuple[str, AmazonInnerTransactionsDict]:
 
         payment_type: str = (
             "Gift Card" if "Gift Card" in transaction[0] else "Credit Card"
