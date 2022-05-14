@@ -1,4 +1,8 @@
-from typing import TypedDict, TypeVar
+from typing import TypedDict
+
+import datetime
+
+from amazon_ynab.amazon.invoice_parser import TransactionInvoice
 
 
 class AmazonInnerTransactionsDict(TypedDict):
@@ -7,3 +11,15 @@ class AmazonInnerTransactionsDict(TypedDict):
 
 
 AmazonTransactionsDict = dict[str, AmazonInnerTransactionsDict]
+
+AmazonInvoicesDict = dict[str, TransactionInvoice]
+
+
+class YNABInnerTransactionsDict(TypedDict):
+    amount: int
+    date: datetime.date
+    payee: str
+    memo: str | None
+
+
+YNABTransactionsDict = dict[str, YNABInnerTransactionsDict]
