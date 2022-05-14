@@ -72,9 +72,6 @@ def run(  # noqa
     days_back: int = typer.Option(
         30, "--days-back", "-d", help="Number of days back to scrape"
     ),
-    today_inclusive: bool = typer.Option(
-        False, "--today-inclusive", "-t", help="Include today in the scrape"
-    ),
     short_items: bool = typer.Option(
         False, "--short-items", "-s", help="Shorten item names to fit in YNAB"
     ),
