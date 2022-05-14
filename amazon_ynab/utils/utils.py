@@ -1,6 +1,7 @@
 from typing import Optional, TypeVar, Union
 
 import pathlib
+from datetime import datetime, timedelta
 
 import typer
 import yaml
@@ -58,3 +59,10 @@ def not_none(obj: T | None, *, message: str | None = None) -> T:
             raise TypeError(message)
         raise TypeError("object is unexpectedly None")
     return obj
+
+
+def days_back_to_cutoff_date(days_back: int) -> datetime:
+
+    cutoff_date = datetime.today() - timedelta(days=days_back)
+
+    return cutoff_date
