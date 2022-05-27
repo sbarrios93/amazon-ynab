@@ -1496,7 +1496,7 @@ requests = "*"
 
 [[package]]
 name = "selenium"
-version = "4.1.5"
+version = "4.2.0"
 description = ""
 category = "main"
 optional = false
@@ -1899,7 +1899,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "91709895e9c79077aab8feb14daf37039e603539d84002efa4a439587c2523db"
+content-hash = "57a8d29e0d17964024714aeeb80341751f04d12f8a19ccbcaf969cc1f6d974bf"
 
 [metadata.files]
 appnope = [
@@ -2851,7 +2851,7 @@ safety = [
     {file = "safety-1.10.3.tar.gz", hash = "sha256:30e394d02a20ac49b7f65292d19d38fa927a8f9582cdfd3ad1adbbc66c641ad5"},
 ]
 selenium = [
-    {file = "selenium-4.1.5-py3-none-any.whl", hash = "sha256:866b6dd6c459210662bff922ee7c33162d21920fbf6811e8e5a52be3866a687f"},
+    {file = "selenium-4.2.0-py3-none-any.whl", hash = "sha256:ba5b2633f43cf6fe9d308fa4a6996e00a101ab9cb1aad6fd91ae1f3dbe57f56f"},
 ]
 send2trash = [
     {file = "Send2Trash-1.8.0-py3-none-any.whl", hash = "sha256:f20eaadfdb517eaca5ce077640cb261c7d2698385a6a0f072a4a5447fd49fa08"},
