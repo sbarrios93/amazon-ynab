@@ -1347,7 +1347,7 @@ six = ">=1.5"
 
 [[package]]
 name = "pyupgrade"
-version = "2.32.1"
+version = "2.33.0"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -1899,7 +1899,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "91709895e9c79077aab8feb14daf37039e603539d84002efa4a439587c2523db"
+content-hash = "f0def6dfd138ebf61a60f34bca86d2eb9da9b770c04fbe782c586a857bcb2726"
 
 [metadata.files]
 appnope = [
@@ -2641,8 +2641,8 @@ python-dateutil = [
     {file = "python_dateutil-2.8.2-py2.py3-none-any.whl", hash = "sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9"},
 ]
 pyupgrade = [
-    {file = "pyupgrade-2.32.1-py2.py3-none-any.whl", hash = "sha256:d874f34870abadd7536c89678f9811076d5df93c13620f90a125355a2d31fa91"},
-    {file = "pyupgrade-2.32.1.tar.gz", hash = "sha256:11e2c3e4e2e53a61b2d8852ed154ea5683887b6ac42561622ca8d89c94fd951a"},
+    {file = "pyupgrade-2.33.0-py2.py3-none-any.whl", hash = "sha256:0e12263a032d84e983cc1879c75e9a67e43b38897a91995e8c82bd485a66d38e"},
+    {file = "pyupgrade-2.33.0.tar.gz", hash = "sha256:a7c9f12efee6f9e1e5454dbace80e78f713ebf040984486a653bb657828a6d1c"},
 ]
 pywin32 = [
     {file = "pywin32-304-cp310-cp310-win32.whl", hash = "sha256:3c7bacf5e24298c86314f03fa20e16558a4e4138fc34615d7de4070c23e65af3"},
