@@ -46,7 +46,7 @@ types-requests = "^2.27.25"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.4"
-black = {version = "^22.3.0", allow-prereleases = true}
+black = {version = "^22.6.0", allow-prereleases = true}
 coverage = "^6.3.3"
 coverage-badge = "^1.1.0"
 darglint = "^1.8.1"
