@@ -766,7 +766,7 @@ python-versions = "*"
 
 [[package]]
 name = "mypy"
-version = "0.950"
+version = "0.961"
 description = "Optional static typing for Python"
 category = "dev"
 optional = false
@@ -2001,7 +2001,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "a036ccdb703690a09de3c7537b17efc6f73a6d065bc5491063b010799a93b4dc"
+content-hash = "1a726b14c92858e8cbd899a00b24bc68afb1d7b842097364c156d598beaa4f0a"
 
 [metadata.files]
 appnope = []
