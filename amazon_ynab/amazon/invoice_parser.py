@@ -15,9 +15,8 @@ from bs4 import BeautifulSoup as bs
 from amazon_ynab.utils.utils import not_none
 from amazon_ynab.words.string_modifier import shorten_string
 
+
 # from amazon_ynab.amazon.product_summarizer import shorten_string
-
-
 class TransactionInvoice:
     def __init__(
         self,

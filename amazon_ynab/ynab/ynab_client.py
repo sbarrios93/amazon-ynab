@@ -98,7 +98,7 @@ class YNABClient:
         Filters transactions by date.
         """
 
-        search_by = re.compile(r"^.*[[aA]mazon|AMZN].*$", re.IGNORECASE)
+        search_by = re.compile(r"^.*[amazon|AMZN].*$", re.IGNORECASE)
 
         filtered_transactions = filter(
             lambda item: search_by.match(item["payee_name"])
