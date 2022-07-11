@@ -1372,7 +1372,7 @@ cli = ["click (>=5.0)"]
 
 [[package]]
 name = "pyupgrade"
-version = "2.37.0"
+version = "2.37.1"
 description = "A tool to automatically upgrade syntax for newer versions."
 category = "dev"
 optional = false
@@ -1967,7 +1967,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "b4bf18a2b78f176049001fa0696d34e0b1ecacc817c5707b74e613f357ef71bd"
+content-hash = "f8719ad6c5ac5ca3bebeb16a3613a3b528dd65ada9203ef6c1da6a79348b80f5"
 
 [metadata.files]
 appnope = []
