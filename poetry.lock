@@ -1500,7 +1500,7 @@ astroid = ">=1.4"
 
 [[package]]
 name = "rich"
-version = "12.4.4"
+version = "12.5.1"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
 category = "main"
 optional = false
@@ -1967,7 +1967,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "f8719ad6c5ac5ca3bebeb16a3613a3b528dd65ada9203ef6c1da6a79348b80f5"
+content-hash = "c622dcf099c60da7cf5afe45ed15527ce1d63c1a3d5d7f05bf9f53b0c468e242"
 
 [metadata.files]
 appnope = []
