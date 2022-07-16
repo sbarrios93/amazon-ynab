@@ -1826,7 +1826,7 @@ python-versions = "*"
 
 [[package]]
 name = "types-pyyaml"
-version = "6.0.9"
+version = "6.0.10"
 description = "Typing stubs for PyYAML"
 category = "dev"
 optional = false
@@ -1967,7 +1967,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "c622dcf099c60da7cf5afe45ed15527ce1d63c1a3d5d7f05bf9f53b0c468e242"
+content-hash = "7e2793a125d479150060cfe603a3ca16172685cacc5bdc37429e847bc8d4f34c"
 
 [metadata.files]
 appnope = [
@@ -2946,8 +2946,8 @@ requirements-detector = [
     {file = "requirements-detector-0.7.tar.gz", hash = "sha256:0d1e13e61ed243f9c3c86e6cbb19980bcb3a0e0619cde2ec1f3af70fdbee6f7b"},
 ]
 rich = [
-    {file = "rich-12.4.4-py3-none-any.whl", hash = "sha256:d2bbd99c320a2532ac71ff6a3164867884357da3e3301f0240090c5d2fdac7ec"},
-    {file = "rich-12.4.4.tar.gz", hash = "sha256:4c586de507202505346f3e32d1363eb9ed6932f0c2f63184dea88983ff4971e2"},
+    {file = "rich-12.5.1-py3-none-any.whl", hash = "sha256:2eb4e6894cde1e017976d2975ac210ef515d7548bc595ba20e195fb9628acdeb"},
+    {file = "rich-12.5.1.tar.gz", hash = "sha256:63a5c5ce3673d3d5fbbf23cd87e11ab84b6b451436f1b7f19ec54b6bc36ed7ca"},
 ]
 "ruamel.yaml" = [
     {file = "ruamel.yaml-0.17.21-py3-none-any.whl", hash = "sha256:742b35d3d665023981bd6d16b3d24248ce5df75fdb4e2924e93a05c1f8b61ca7"},
@@ -3093,8 +3093,8 @@ types-beautifulsoup4 = [
     {file = "types_beautifulsoup4-4.11.2-py3-none-any.whl", hash = "sha256:2838757b9f321ad7b781c336c1779a1c5b2f1966b83d125b872102be940a5a0f"},
 ]
 types-pyyaml = [
-    {file = "types-PyYAML-6.0.9.tar.gz", hash = "sha256:33ae75c84b8f61fddf0c63e9c7e557db9db1694ad3c2ee8628ec5efebb5a5e9b"},
-    {file = "types_PyYAML-6.0.9-py3-none-any.whl", hash = "sha256:b738e9ef120da0af8c235ba49d3b72510f56ef9bcc308fc8e7357100ff122284"},
+    {file = "types-PyYAML-6.0.10.tar.gz", hash = "sha256:a1676caeb098096833fe2f1472e7ea8debf7663222964fa90545cfaafebf3385"},
+    {file = "types_PyYAML-6.0.10-py3-none-any.whl", hash = "sha256:18985a382c93fb12187daae6f57ce7787e3651cd590291c907d3e757919689ff"},
 ]
 types-requests = [
     {file = "types-requests-2.28.0.tar.gz", hash = "sha256:9863d16dfbb3fa55dcda64fa3b989e76e8859033b26c1e1623e30465cfe294d3"},
