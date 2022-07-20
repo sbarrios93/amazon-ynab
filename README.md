@@ -1,6 +1,6 @@
-![Init Application](./assets/images/init_command.png)
+![Init Application](https://github.com/sbarrios93/amazon-ynab/blob/main/assets/images/init_command.png?raw=true)
 
-![Run](./assets/images/run_command.png)
+![Run](https://github.com/sbarrios93/amazon-ynab/blob/main/assets/images/run_command.png?raw=true)
 ## Credits
 ### Projects
 This project is heavily inspired from the following project:
