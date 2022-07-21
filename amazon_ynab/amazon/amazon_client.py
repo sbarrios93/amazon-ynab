@@ -125,8 +125,9 @@ class AmazonClient:
             self.raw_transaction_data += transaction_texts
 
             # now we need to check the dates of the transactions of the last page, and if they are older than the cutoff date, we need stop the loop
-            dates_divs = self.driver.find_elements_by_xpath(
-                '//div[contains(@class,"a-section a-spacing-base a-padding-base apx-transaction-date-container")]'
+            dates_divs = self.driver.find_elements(
+                "xpath",
+                '//div[contains(@class,"a-section a-spacing-base a-padding-base apx-transaction-date-container")]',
             )
 
             transaction_dates_texts = list(
