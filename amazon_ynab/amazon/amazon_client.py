@@ -90,17 +90,15 @@ class AmazonClient:
         )
         email_elem.clear()
         email_elem.send_keys(self.user_email)
-        self.driver.find_element_by_id("continue").click()
+        self.driver.find_element("id", "continue").click()
 
         password_elem = self.wait_driver.until(
             EC.element_to_be_clickable((By.ID, "ap_password"))
         )
         password_elem.clear()
         password_elem.send_keys(self.user_password)
-        self.driver.find_element_by_name("rememberMe").click()
-        self.driver.find_element_by_id("signInSubmit").click()
-
-        time.sleep(2)
+        self.driver.find_element("name", "rememberMe").click()
+        self.driver.find_element("id", "signInSubmit").click()
 
     def _get_raw_transactions(self) -> None:
 
@@ -118,7 +116,10 @@ class AmazonClient:
                 )
             )
             transaction_texts = list(
-                map(lambda transaction_div: str(transaction_div.text), transaction_divs)
+                map(
+                    lambda transaction_div: str(transaction_div.text),
+                    transaction_divs,
+                )
             )
 
             self.raw_transaction_data += transaction_texts
@@ -172,7 +173,10 @@ class AmazonClient:
         else:
             is_tip = False
 
-        return order_number, {"payments": {payment_type: amount}, "is_tip": is_tip}
+        return order_number, {
+            "payments": {payment_type: amount},
+            "is_tip": is_tip,
+        }
 
     def _parse_raw_transactions(self) -> None:
 
@@ -211,7 +215,8 @@ class AmazonClient:
             transient=True,
         ) as progress:
             processing_tasks = progress.add_task(
-                "[green]Processing Invoices[/]", total=len(list(self.transactions))
+                "[green]Processing Invoices[/]",
+                total=len(list(self.transactions)),
             )
 
             for order_number in self.transactions:
