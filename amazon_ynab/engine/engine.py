@@ -46,7 +46,7 @@ class Engine:
         # we need to call the ynab client to read the budgets
         self.ynab_client.prepare_client()
 
-        if self.secrets["ynab"]["budget_id"]:
+        if self.secrets["ynab"].get("budget_id"):
             budget_matched = False
             for _, budget_id in self.ynab_client.all_budgets.items():
                 if budget_id == self.secrets["ynab"]["budget_id"]:
