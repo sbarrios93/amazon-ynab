@@ -19,6 +19,8 @@ def create_secrets_file(path: str | pathlib.Path) -> None:
         "Amazon password: ", hide_input=True, confirmation_prompt=True
     )
     ynab_token = typer.prompt("YNAB token: ")
+    amazon_payee_id = typer.prompt("Amazon payee ID: ")
+    amazon_payee_name = typer.prompt("Amazon payee name: ")
 
     secrets = {
         "amazon": {
@@ -27,6 +29,8 @@ def create_secrets_file(path: str | pathlib.Path) -> None:
         },
         "ynab": {
             "token": ynab_token,
+            "amazon_payee_id": amazon_payee_id,
+            "amazon_payee_name": amazon_payee_name,
         },
     }
     # make path (dir) if it doesn't exist
