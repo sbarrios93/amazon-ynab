@@ -57,6 +57,18 @@ The options available for the run command are:
 Sometimes the application fails to reconcile the transactions. In most cases this will be because YNAB doesn't show the automatically imported transactions on the API without some manual intervention. To fix this, you can go to your YNAB budget and for each of your accounts click on `View` at the top like the image below:
 ![](assets/images/view-imported.png)
 
+## Secrets File Structure
+
+```yaml
+amazon:
+  password: <YOUR_AMAZON_PASSWORD>
+  username: <YOUR_AMAZON_EMAIL>
+ynab:
+  token: <YOUR_YNAB_API_TOKEN>
+  amazon_payee_id: <YOUR_AMAZON_PAYEE_ID>
+  amazon_payee_name: <YOUR_AMAZON_PAYEE_NAME>
+```
+
 ## Credits
 
 ### Projects
