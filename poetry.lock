@@ -1833,7 +1833,7 @@ test = ["shellingham (>=1.3.0,<2.0.0)", "pytest (>=4.4.0,<5.4.0)", "pytest-cov (
 
 [[package]]
 name = "types-beautifulsoup4"
-version = "4.11.3"
+version = "4.11.4"
 description = "Typing stubs for beautifulsoup4"
 category = "main"
 optional = false
@@ -1981,7 +1981,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "1c91ab2e63fc02881231140ccfb6507b47c24688c80830615b56cc85a55ff0ff"
+content-hash = "6920b294481bd8587d9b6b5ff822125ec70f11fc8c13b460a75b93905230abde"
 
 [metadata.files]
 appnope = [
@@ -3103,8 +3103,8 @@ typer = [
     {file = "typer-0.6.1.tar.gz", hash = "sha256:2d5720a5e63f73eaf31edaa15f6ab87f35f0690f8ca233017d7d23d743a91d73"},
 ]
 types-beautifulsoup4 = [
-    {file = "types-beautifulsoup4-4.11.3.tar.gz", hash = "sha256:8cf2b1de3a6c7c71afbd94be5ae5b1575af6a864610cd5a1bcf6b5782cbb73ab"},
-    {file = "types_beautifulsoup4-4.11.3-py3-none-any.whl", hash = "sha256:4d4b4d88099d1d738e4dc88de86acc953235629a29830a269d76cdf073325c35"},
+    {file = "types-beautifulsoup4-4.11.4.tar.gz", hash = "sha256:50111f84c2a42a0ff890acfa0f3a79f627e2852456ff4df32fd54cf42fd197de"},
+    {file = "types_beautifulsoup4-4.11.4-py3-none-any.whl", hash = "sha256:461aead477fa4e110d2e135509f1bee847f3cada404cb6f969eb66d330a792b9"},
 ]
 types-pyyaml = [
     {file = "types-PyYAML-6.0.10.tar.gz", hash = "sha256:a1676caeb098096833fe2f1472e7ea8debf7663222964fa90545cfaafebf3385"},
