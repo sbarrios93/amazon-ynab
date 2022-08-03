@@ -31,7 +31,7 @@ trio==0.20.0; python_version >= "3.7" and python_version < "4.0"
 typer==0.4.1; python_version >= "3.6"
 types-beautifulsoup4==4.11.1
 types-requests==2.27.25
-types-urllib3==1.26.16
+types-urllib3==1.26.21
 urllib3==1.26.9; python_version >= "3.7" and python_full_version < "3.0.0" and python_version < "4.0" or python_full_version >= "3.6.0" and python_version < "4" and python_version >= "3.7"
 webdriver-manager==3.5.4; python_version >= "3.6"
 wsproto==1.1.0; python_version >= "3.7" and python_version < "4.0" and python_full_version >= "3.7.0"
