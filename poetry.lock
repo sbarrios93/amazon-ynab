@@ -1429,7 +1429,7 @@ test = ["flaky", "pytest", "pytest-qt"]
 
 [[package]]
 name = "qtpy"
-version = "2.1.0"
+version = "2.2.0"
 description = "Provides an abstraction layer on top of the various Qt bindings (PyQt5/6 and PySide2/6)."
 category = "dev"
 optional = false
@@ -1553,9 +1553,9 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-win32 = ["pywin32"]
+nativelib = ["pyobjc-framework-cocoa", "pywin32"]
 objc = ["pyobjc-framework-cocoa"]
-nativelib = ["pywin32", "pyobjc-framework-cocoa"]
+win32 = ["pywin32"]
 
 [[package]]
 name = "setoptconf-tmp"
@@ -2829,8 +2829,8 @@ qtconsole = [
     {file = "qtconsole-5.3.1.tar.gz", hash = "sha256:b73723fac43938b684dcb237a88510dc7721c43a726cea8ade179a2927c0a2f3"},
 ]
 qtpy = [
-    {file = "QtPy-2.1.0-py3-none-any.whl", hash = "sha256:aee0586081f943029312becece9f63977b0a9e3788f77a6ac8cc74802bb173d6"},
-    {file = "QtPy-2.1.0.tar.gz", hash = "sha256:ca8cd4217175186344299ee4c0f7e7adcf362c70852ba35b255a534077025c06"},
+    {file = "QtPy-2.2.0-py3-none-any.whl", hash = "sha256:d283cfba378b0dbe36a55b68aea8ee2f86cd6ccf06c023af25bbe705ffbb29e5"},
+    {file = "QtPy-2.2.0.tar.gz", hash = "sha256:d85f1b121f24a41ad26c55c446e66abdb7c528839f8c4f11f156ec4541903914"},
 ]
 regex = [
     {file = "regex-2022.7.9-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:d35bbcbf70d14f724e7489746cf68efe122796578addd98f91428e144d0ad266"},
