@@ -11,7 +11,7 @@ license = "MIT"
 name = "amazon-ynab"
 readme = "README.md"
 repository = "https://github.com/sbarrios93/amazon-ynab"
-version = "0.1.0"
+version = "0.2.0"
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
 keywords = [] #! Update me
