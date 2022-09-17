@@ -10,7 +10,7 @@ commonmark==0.9.1; python_full_version >= "3.6.3" and python_full_version < "4.0
 cryptography==37.0.2; python_version >= "3.7" and python_full_version < "3.0.0" and python_version < "4.0" or python_full_version >= "3.5.0" and python_version < "4" and python_version >= "3.7"
 h11==0.13.0; python_version >= "3.7" and python_version < "4.0" and python_full_version >= "3.7.0"
 idna==3.3; python_version >= "3.7" and python_version < "4.0" and (python_version >= "3.7" and python_full_version < "3.0.0" and python_version < "4.0" or python_full_version >= "3.5.0" and python_version < "4" and python_version >= "3.7") and (python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6")
-joblib==1.1.0; python_version >= "3.7"
+joblib==1.2.0; python_version >= "3.7"
 nltk==3.7; python_version >= "3.7"
 outcome==1.1.0; python_version >= "3.7" and python_version < "4.0"
 pycparser==2.21; python_version >= "3.7" and python_full_version < "3.0.0" and os_name == "nt" and implementation_name != "pypy" and python_version < "4.0" or os_name == "nt" and implementation_name != "pypy" and python_version >= "3.7" and python_version < "4.0" and python_full_version >= "3.4.0"
