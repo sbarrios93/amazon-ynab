@@ -2,7 +2,9 @@
 
 default_context:
   project_name: "amazon-ynab"
-  project_description: "Amazon YNAB is a reconciler that scrapes Amazon orders and adds memo info on each corresponding YNAB transaction"
+  project_description:
+    "Amazon YNAB is a reconciler that scrapes Amazon orders and adds memo info on each
+    corresponding YNAB transaction"
   organization: "self"
   license: "MIT"
   minimal_python_version: "3.10"

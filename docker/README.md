@@ -14,8 +14,7 @@ which is equivalent to:
 make docker-build VERSION=latest
 ```
 
-You may provide name and version for the image.
-Default name is `IMAGE := amazon_ynab`.
+You may provide name and version for the image. Default name is `IMAGE := amazon_ynab`.
 Default version is `VERSION := latest`.
 
 ```bash

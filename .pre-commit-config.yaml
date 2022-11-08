@@ -1,44 +1,136 @@
 default_language_version:
-  python: python3.10
-
-default_stages: [commit, push]
-
+  python: python3
+  node: "16.14.2"
+exclude: |
+  (?x)
+  # Files that fail if changed manually
+  .*\.(diff|patch)$
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.5.0
-    hooks:
-      - id: check-yaml
-      - id: end-of-file-fixer
-        exclude: LICENSE
-
+  # General
   - repo: local
     hooks:
+      - id: forbidden-files
+        name: forbidden files
+        entry: found forbidden files; remove them
+        language: fail
+        files: "\\.rej$"
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.6.2
+    hooks:
+      - id: prettier
+        stages: [commit]
+        additional_dependencies:
+          - prettier@2.6.2
+          - "@prettier/plugin-xml@2.1.0"
+        args:
+          - --plugin=@prettier/plugin-xml
+  - repo: local
+    hooks:
+      - id: autoflake
+        name: autoflake
+        entry: poetry run autoflake
+        language: system
+        types: [python]
+        require_serial: true
+        args:
+          - --in-place
+          - --expand-star-imports
+          - --ignore-init-module-imports
+          - --remove-all-unused-imports
+          - --remove-duplicate-keys
+          - --remove-unused-variables
       - id: pyupgrade
         name: pyupgrade
-        entry: poetry run pyupgrade --py39-plus
-        types: [python]
+        description: Automatically upgrade syntax for newer versions.
+        entry: poetry run pyupgrade
         language: system
-
-  - repo: local
-    hooks:
-      - id: isort
-        name: isort
-        entry: poetry run isort --settings-path pyproject.toml
         types: [python]
-        language: system
-
-  - repo: local
-    hooks:
       - id: black
         name: black
-        entry: poetry run black --config pyproject.toml
-        types: [python]
+        description: "Black: The uncompromising Python code formatter"
+        entry: poetry run black
         language: system
-
-  - repo: https://github.com/python-poetry/poetry
-    rev: "1.2" # add version here
-    hooks:
+        minimum_pre_commit_version: 2.9.2
+        require_serial: true
+        types_or: [python, pyi]
+      - id: blacken-docs
+        name: blacken-docs
+        description: Run `black` on python code blocks in documentation files
+        entry: poetry run blacken-docs
+        language: system
+        files: '\.(rst|md|markdown|py|tex)$'
+      - id: isort
+        name: isort
+        entry: poetry run isort
+        require_serial: true
+        language: system
+        types_or: [cython, pyi, python]
+        minimum_pre_commit_version: "2.9.2"
+        args:
+          - --filter-files
+          - --settings=.
+      - &flake8
+        id: flake8
+        name: flake8 except __init__.py
+        description:
+          "`flake8` is a command-line utility for enforcing style consistency across
+          Python projects."
+        entry: poetry run flake8
+        language: system
+        types: [python]
+        require_serial: true
+        exclude: /__init__\.py$
+      - <<: *flake8
+        name: flake8 for __init__.py
+        args:
+          # ignore unused imports in __init__.py
+          - --extend-ignore=F401
+        files: /__init__\.py$
+      - id: pydocstyle
+        name: pydocstyle
+        description:
+          pydocstyle is a static analysis tool for checking compliance with Python
+          docstring conventions.
+        entry: poetry run pydocstyle
+        language: system
+        types: [python]
       - id: poetry-check
-      - id: poetry-lock
-      - id: poetry-export
-        args: ["-f", "requirements.txt", "-o", "requirements.txt"]
+        name: poetry-check
+        description: run poetry check to validate config
+        entry: poetry check
+        language: system
+        pass_filenames: false
+        files: ^pyproject.toml$
+      - id: commitizen
+        name: commitizen check
+        description: "Check whether the commit message follows commiting rules"
+        entry: poetry run cz check --commit-msg-file
+        language: system
+        require_serial: true
+        stages: [commit-msg]
+        minimum_pre_commit_version: "0.15.4"
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+      - id: check-added-large-files
+        args:
+          - --maxkb=1000
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-symlinks
+        exclude: gitlab-ci
+      - id: detect-private-key
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args:
+          - --fix=lf
+      - id: trailing-whitespace
+      - id: check-ast
+      - id: check-builtin-literals
+      - id: check-docstring-first
+      - id: debug-statements
+      - id: fix-encoding-pragma
+        args:
+          - --remove
+      - id: requirements-txt-fixer
