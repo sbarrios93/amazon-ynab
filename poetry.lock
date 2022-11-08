@@ -1567,8 +1567,8 @@ h11 = ">=0.9.0,<1"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.10"
-content-hash = "1d4e89657d94a5d821842b45fe461b2518b9efe40646189a5422af5ae9dee5f1"
+python-versions = "^3.10 <=3.12"
+content-hash = "eb581e0645e5cedb08381e4348463618901fa53b0e48247e9972cca3d849efcc"
 
 [metadata.files]
 appnope = [
