@@ -1489,7 +1489,7 @@ python-versions = "*"
 
 [[package]]
 name = "types-urllib3"
-version = "1.26.25.2"
+version = "1.26.25.3"
 description = "Typing stubs for urllib3"
 category = "main"
 optional = false
@@ -1579,7 +1579,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10 <=3.12"
-content-hash = "dd9b5f4812a5a1104240c248d6442303d70f881a34536dfbcfc32da9ab7d1714"
+content-hash = "4c1b4098b0243043e13634111ef52ab25f3a13e5aee2dd5031b818b2da3444a0"
 
 [metadata.files]
 appnope = [
@@ -2534,8 +2534,8 @@ types-selenium = [
     {file = "types_selenium-3.141.9-py3-none-any.whl", hash = "sha256:83606e061154bc2241d6eba964263f9cf1dcaa6c7dfff0bb10d3abcfbdaefdc7"},
 ]
 types-urllib3 = [
-    {file = "types-urllib3-1.26.25.2.tar.gz", hash = "sha256:a3a510db609b363670cc62edb76598b8270bd34d4eb2f6c9f088d0e7d8196d6b"},
-    {file = "types_urllib3-1.26.25.2-py3-none-any.whl", hash = "sha256:7b78e4304b4534a010cfef97d1a3f3ebff0fa7119b205d08a355266d7c4e8e22"},
+    {file = "types-urllib3-1.26.25.3.tar.gz", hash = "sha256:1807b87b8ee1ae0226813ba2c52330eff20fb2bf6359b1de24df08eb3090e442"},
+    {file = "types_urllib3-1.26.25.3-py3-none-any.whl", hash = "sha256:a188c24fc61a99658c8c324c8dd7419f5b91a0d89df004e5f576869122c1db55"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.4.0-py3-none-any.whl", hash = "sha256:16fa4864408f655d35ec496218b85f79b3437c829e93320c7c9215ccfd92489e"},
