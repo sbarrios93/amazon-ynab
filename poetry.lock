@@ -735,7 +735,7 @@ python-versions = "*"
 
 [[package]]
 name = "platformdirs"
-version = "2.5.3"
+version = "2.5.4"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
 optional = false
@@ -1579,7 +1579,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10 <=3.12"
-content-hash = "dd9b5f4812a5a1104240c248d6442303d70f881a34536dfbcfc32da9ab7d1714"
+content-hash = "4c1b4098b0243043e13634111ef52ab25f3a13e5aee2dd5031b818b2da3444a0"
 
 [metadata.files]
 appnope = [
@@ -2021,8 +2021,8 @@ pickleshare = [
     {file = "pickleshare-0.7.5.tar.gz", hash = "sha256:87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca"},
 ]
 platformdirs = [
-    {file = "platformdirs-2.5.3-py3-none-any.whl", hash = "sha256:0cb405749187a194f444c25c82ef7225232f11564721eabffc6ec70df83b11cb"},
-    {file = "platformdirs-2.5.3.tar.gz", hash = "sha256:6e52c21afff35cb659c6e52d8b4d61b9bd544557180440538f255d9382c8cbe0"},
+    {file = "platformdirs-2.5.4-py3-none-any.whl", hash = "sha256:af0276409f9a02373d540bf8480021a048711d572745aef4b7842dad245eba10"},
+    {file = "platformdirs-2.5.4.tar.gz", hash = "sha256:1006647646d80f16130f052404c6b901e80ee4ed6bef6792e1f238a8969106f7"},
 ]
 pluggy = [
     {file = "pluggy-1.0.0-py2.py3-none-any.whl", hash = "sha256:74134bbf457f031a36d68416e1509f34bd5ccc019f0bcc952c7b909d06b37bd3"},
