@@ -1193,7 +1193,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "safety"
-version = "2.3.1"
+version = "2.3.2"
 description = "Checks installed dependencies for known vulnerabilities and licenses."
 category = "dev"
 optional = false
@@ -1579,7 +1579,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10 <=3.12"
-content-hash = "dd9b5f4812a5a1104240c248d6442303d70f881a34536dfbcfc32da9ab7d1714"
+content-hash = "4c1b4098b0243043e13634111ef52ab25f3a13e5aee2dd5031b818b2da3444a0"
 
 [metadata.files]
 appnope = [
@@ -2418,8 +2418,8 @@ ruamel-yaml-clib = [
     {file = "ruamel.yaml.clib-0.2.7.tar.gz", hash = "sha256:1f08fd5a2bea9c4180db71678e850b995d2a5f4537be0e94557668cf0f5f9497"},
 ]
 safety = [
-    {file = "safety-2.3.1-py3-none-any.whl", hash = "sha256:8f098d12b607db2756886280e85c28ece8db1bba4f45fc5f981f4663217bd619"},
-    {file = "safety-2.3.1.tar.gz", hash = "sha256:6e6fcb7d4e8321098cf289f59b65051cafd3467f089c6e57c9f894ae32c23b71"},
+    {file = "safety-2.3.2-py3-none-any.whl", hash = "sha256:d824cccd76fcf451c745d0a280dabc5176903878a68b9b9a2ec7dbfc2f8d03ff"},
+    {file = "safety-2.3.2.tar.gz", hash = "sha256:7ed8d71f5ba7590d1c9abfa22c72a64de389ae2e07c6732b1c90955a168c55bf"},
 ]
 selenium = [
     {file = "selenium-4.6.0-py3-none-any.whl", hash = "sha256:3f1999875ef487ae676a254e7293a68041f1f1ec76be81402d8a1cd5a481bf3b"},
