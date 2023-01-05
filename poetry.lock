@@ -1454,8 +1454,19 @@ test = ["black (>=22.3.0,<23.0.0)", "coverage (>=5.2,<6.0)", "isort (>=5.0.6,<6.
 
 [[package]]
 name = "types-beautifulsoup4"
-version = "4.11.6"
+version = "4.11.6.2"
 description = "Typing stubs for beautifulsoup4"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+types-html5lib = "*"
+
+[[package]]
+name = "types-html5lib"
+version = "1.1.11.10"
+description = "Typing stubs for html5lib"
 category = "main"
 optional = false
 python-versions = "*"
@@ -1579,7 +1590,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10 <=3.12"
-content-hash = "dd9b5f4812a5a1104240c248d6442303d70f881a34536dfbcfc32da9ab7d1714"
+content-hash = "4c1b4098b0243043e13634111ef52ab25f3a13e5aee2dd5031b818b2da3444a0"
 
 [metadata.files]
 appnope = [
@@ -2391,6 +2402,7 @@ ruamel-yaml-clib = [
     {file = "ruamel.yaml.clib-0.2.7-cp310-cp310-win_amd64.whl", hash = "sha256:d000f258cf42fec2b1bbf2863c61d7b8918d31ffee905da62dede869254d3b8a"},
     {file = "ruamel.yaml.clib-0.2.7-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:045e0626baf1c52e5527bd5db361bc83180faaba2ff586e763d3d5982a876a9e"},
     {file = "ruamel.yaml.clib-0.2.7-cp311-cp311-macosx_12_6_arm64.whl", hash = "sha256:721bc4ba4525f53f6a611ec0967bdcee61b31df5a56801281027a3a6d1c2daf5"},
+    {file = "ruamel.yaml.clib-0.2.7-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl", hash = "sha256:41d0f1fa4c6830176eef5b276af04c89320ea616655d01327d5ce65e50575c94"},
     {file = "ruamel.yaml.clib-0.2.7-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:4b3a93bb9bc662fc1f99c5c3ea8e623d8b23ad22f861eb6fce9377ac07ad6072"},
     {file = "ruamel.yaml.clib-0.2.7-cp36-cp36m-macosx_12_0_arm64.whl", hash = "sha256:a234a20ae07e8469da311e182e70ef6b199d0fbeb6c6cc2901204dd87fb867e8"},
     {file = "ruamel.yaml.clib-0.2.7-cp36-cp36m-manylinux2014_aarch64.whl", hash = "sha256:15910ef4f3e537eea7fe45f8a5d19997479940d9196f357152a09031c5be59f3"},
@@ -2518,8 +2530,12 @@ typer = [
     {file = "typer-0.6.1.tar.gz", hash = "sha256:2d5720a5e63f73eaf31edaa15f6ab87f35f0690f8ca233017d7d23d743a91d73"},
 ]
 types-beautifulsoup4 = [
-    {file = "types-beautifulsoup4-4.11.6.tar.gz", hash = "sha256:2670dd71995df464041e2941fa9bbb694795271e3dedd7262b4766649a1cbe82"},
-    {file = "types_beautifulsoup4-4.11.6-py3-none-any.whl", hash = "sha256:ac9dd1383481201ea07f27c5a43e7b1ee71caf9c720b7ae951db15d60d126e80"},
+    {file = "types-beautifulsoup4-4.11.6.2.tar.gz", hash = "sha256:dbeb2f82f2d79878107238ab50291361563ae5db99e198a68e91dbb4c0f37b3f"},
+    {file = "types_beautifulsoup4-4.11.6.2-py3-none-any.whl", hash = "sha256:4994a3b5ce66467977d9ce65031f5e212f23af66941669a59f50a1801260d9db"},
+]
+types-html5lib = [
+    {file = "types-html5lib-1.1.11.10.tar.gz", hash = "sha256:90eeffad04010bf67bcccf77b9cc6cf4783eec13cbd22ebbaaf20f24d5f2ca11"},
+    {file = "types_html5lib-1.1.11.10-py3-none-any.whl", hash = "sha256:18c34ce51eac062321b224365b3aee5b5cdc1613872ed8469c9c0c4ccd3e02e9"},
 ]
 types-pyyaml = [
     {file = "types-PyYAML-6.0.12.1.tar.gz", hash = "sha256:70ccaafcf3fb404d57bffc1529fdd86a13e8b4f2cf9fc3ee81a6408ce0ad59d2"},
