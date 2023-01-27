@@ -38,6 +38,18 @@ tests = ["attrs[tests-no-zope]", "zope.interface"]
 tests-no-zope = ["cloudpickle", "cloudpickle", "hypothesis", "hypothesis", "mypy (>=0.971,<0.990)", "mypy (>=0.971,<0.990)", "pympler", "pympler", "pytest (>=4.3.0)", "pytest (>=4.3.0)", "pytest-mypy-plugins", "pytest-mypy-plugins", "pytest-xdist[psutil]", "pytest-xdist[psutil]"]
 
 [[package]]
+name = "autoflake"
+version = "2.0.0"
+description = "Removes unused imports and unused variables"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+pyflakes = ">=3.0.0"
+tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
+
+[[package]]
 name = "bandit"
 version = "1.7.4"
 description = "Security oriented static analyser for python code."
@@ -1048,7 +1060,7 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10 <=3.12"
-content-hash = "f6454b8dc72ca7a8b75b1587a5e66987167ded9ccb6e81338c7684b8213c17b9"
+content-hash = "d80bbc0a47ba7b43959ab48ef3b5ffe73208656cdb51672dcaf26eb581b54c18"
 
 [metadata.files]
 astroid = [
@@ -1062,6 +1074,10 @@ async-generator = [
 attrs = [
     {file = "attrs-22.2.0-py3-none-any.whl", hash = "sha256:29e95c7f6778868dbd49170f98f8818f78f3dc5e0e37c0b1f474e3561b240836"},
     {file = "attrs-22.2.0.tar.gz", hash = "sha256:c9227bfc2f01993c03f68db37d1d15c9690188323c067c641f1a35ca58185f99"},
+]
+autoflake = [
+    {file = "autoflake-2.0.0-py3-none-any.whl", hash = "sha256:d58ed4187c6b4f623a942b9a90c43ff84bf6a266f3682f407b42ca52073c9678"},
+    {file = "autoflake-2.0.0.tar.gz", hash = "sha256:7185b596e70d8970c6d4106c112ef41921e472bd26abf3613db99eca88cc8c2a"},
 ]
 bandit = [
     {file = "bandit-1.7.4-py3-none-any.whl", hash = "sha256:412d3f259dab4077d0e7f0c11f50f650cc7d10db905d98f6520a95a18049658a"},
