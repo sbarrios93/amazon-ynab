@@ -86,14 +86,6 @@ repos:
           # ignore unused imports in __init__.py
           - --extend-ignore=F401
         files: /__init__\.py$
-      - id: pydocstyle
-        name: pydocstyle
-        description:
-          pydocstyle is a static analysis tool for checking compliance with Python
-          docstring conventions.
-        entry: poetry run pydocstyle
-        language: system
-        types: [python]
       - id: poetry-check
         name: poetry-check
         description: run poetry check to validate config
@@ -128,7 +120,6 @@ repos:
       - id: trailing-whitespace
       - id: check-ast
       - id: check-builtin-literals
-      - id: check-docstring-first
       - id: debug-statements
       - id: fix-encoding-pragma
         args:

@@ -1,5 +1,3 @@
-from typing import Dict
-
 import yaml
 from rich.console import Console
 

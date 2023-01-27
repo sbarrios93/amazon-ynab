@@ -5,7 +5,6 @@ from rich.console import Console
 
 from amazon_ynab import version
 from amazon_ynab.engine.engine import Engine
-from amazon_ynab.engine.matcher import match_transactions
 from amazon_ynab.paths.common_paths import get_paths
 from amazon_ynab.paths.utils import check_if_path_exists
 from amazon_ynab.utils import utils

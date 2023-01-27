@@ -4,8 +4,6 @@ https://github.com/davidz627/AmazonSyncForYNAB/
 """
 
 
-from typing import Union
-
 import re
 from datetime import date, datetime
 

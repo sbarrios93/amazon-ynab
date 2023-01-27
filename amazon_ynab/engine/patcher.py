@@ -1,7 +1,7 @@
 from typing import Any
 
 from amazon_ynab.amazon.amazon_client import AmazonClient
-from amazon_ynab.utils.custom_types import MatchedTransactionsList, YNABTransactionsDict
+from amazon_ynab.utils.custom_types import MatchedTransactionsList
 from amazon_ynab.ynab.ynab_client import YNABClient
 
 

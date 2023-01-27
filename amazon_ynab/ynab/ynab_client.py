@@ -115,7 +115,6 @@ class YNABClient:
         search_by = re.compile(r"^.*Tips.*$", re.IGNORECASE)
 
         for transaction in self._filter_transactions(self._get_transactions()):
-
             # lets isolate the tip transactions
             if search_by.match(transaction["payee_name"]):
                 self.tip_transactions[transaction["id"]] = {
@@ -144,6 +143,6 @@ class YNABClient:
             headers=self.request_headers,
         )
         if resp.status_code != 200:
-            print(f"Something went wrong, got response: {resp.content}")
+            print(f"Something went wrong, got response: {str(resp.content)}")
         else:
             print(f"Successfully updated transactions {transactions}")
