@@ -32,7 +32,7 @@ jobs:
           poetry install
 
       - name: pre-commit
-      - uses: pre-commit/action@v2.0.0
+        uses: pre-commit/action@v2.0.0
 
       - name: Run style checks
         run: |
