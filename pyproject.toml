@@ -38,7 +38,7 @@ beautifulsoup4 = "^4.11"
 nltk = "^3.7"
 rich = "^12.6"
 selenium = "^4.4"
-typer = { extras = ["all"], version = "^0.6" }
+typer = { extras = ["all"], version = "^0.7" }
 types-beautifulsoup4 = "^4.11"
 webdriver-manager = "^3.8"
 types-requests = "^2.28"
