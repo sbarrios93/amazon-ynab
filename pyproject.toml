@@ -37,7 +37,7 @@ python = "^3.10 <=3.12"
 beautifulsoup4 = "^4.11"
 nltk = "^3.7"
 rich = "^12.6"
-selenium = "^4.4"
+selenium = "^4.8"
 typer = { extras = ["all"], version = "^0.7" }
 types-beautifulsoup4 = "^4.11"
 webdriver-manager = "^3.8"
