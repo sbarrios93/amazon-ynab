@@ -1748,14 +1748,14 @@ files = [
 
 [[package]]
 name = "types-urllib3"
-version = "1.26.25.4"
+version = "1.26.25.7"
 description = "Typing stubs for urllib3"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "types-urllib3-1.26.25.4.tar.gz", hash = "sha256:eec5556428eec862b1ac578fb69aab3877995a99ffec9e5a12cf7fbd0cc9daee"},
-    {file = "types_urllib3-1.26.25.4-py3-none-any.whl", hash = "sha256:ed6b9e8a8be488796f72306889a06a3fc3cb1aa99af02ab8afb50144d7317e49"},
+    {file = "types-urllib3-1.26.25.7.tar.gz", hash = "sha256:df4d3e5472bf8830bd74eac12d56e659f88662ba040c7d106bf3a5bee26fff28"},
+    {file = "types_urllib3-1.26.25.7-py3-none-any.whl", hash = "sha256:28d2d7f5c31ff8ed4d9d2e396ce906c49d37523c3ec207d03d3b1695755a7199"},
 ]
 
 [[package]]
