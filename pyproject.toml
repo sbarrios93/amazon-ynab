@@ -48,7 +48,7 @@ pytest = "^7.2.1"
 
 [tool.poetry.group.dev.dependencies]
 blacken-docs = "^1.12.1"
-bandit = "^1.7.4"
+bandit = "^1.7.5"
 black = { version = "^22.3.0", allow-prereleases = true }
 coverage = "^6.4.4"
 coverage-badge = "^1.1.0"
