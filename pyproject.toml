@@ -50,7 +50,7 @@ pytest = "^7.2.1"
 blacken-docs = "^1.12.1"
 bandit = "^1.7.4"
 black = { version = "^22.3.0", allow-prereleases = true }
-coverage = "^6.4.4"
+coverage = "^7.2.3"
 coverage-badge = "^1.1.0"
 darglint = "^1.8.1"
 isort = { extras = ["colors"], version = "^5.10.1" }
