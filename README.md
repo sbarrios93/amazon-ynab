@@ -16,7 +16,7 @@ You need to have the following information:
 Run the application with
 
 ```bash
-python3 -m amazon_ynab --init
+python3 -m amazon_ynab init
 ```
 
 This will prompt you for the information. Data will be saved by default on the working
