@@ -18,7 +18,7 @@ class Engine:
         cutoff_date: datetime,
         short_items: bool,
         words_per_item: int,
-    ):
+    ) -> None:
         self.secrets = secrets
         self.run_headless = run_headless
         self.cutoff_date = cutoff_date
@@ -53,24 +53,30 @@ class Engine:
                     self.ynab_client.selected_budget = budget_id
                     budget_matched = True
                     self.console.print(
-                        f"[green]✔[/] Budget ID matched: {self.ynab_client.selected_budget}"
+                        "[green]✔[/] Budget ID matched:"
+                        f" {self.ynab_client.selected_budget}"
                     )
                     break
             if not budget_matched:
                 self.console.print(
-                    "[red]✘[/] Budget ID found on secrets file, but it is not in the YNAB budgets list, if you want to use a specific budget id, please add it to the secrets file. You can also set it to null on the secrets file and the program will prompt you for a budget id."
+                    "[red]✘[/] Budget ID found on secrets file, but it is not in the"
+                    " YNAB budgets list, if you want to use a specific budget id,"
+                    " please add it to the secrets file. You can also set it to null on"
+                    " the secrets file and the program will prompt you for a budget id."
                 )
                 raise typer.Exit()
         elif len(self.ynab_client.all_budgets) == 1:
             # if we only have one budget and no budget id, we can use that one
             self.console.print(
-                f"[yellow]WARNING:[/] No budget ID found on secrets file, using the only budget ID found: {list(self.ynab_client.all_budgets.keys())[0]}"
+                "[yellow]WARNING:[/] No budget ID found on secrets file, using the"
+                f" only budget ID found: {list(self.ynab_client.all_budgets.keys())[0]}"
             )
             self.ynab_client.selected_budget = self.ynab_client.all_budgets[
                 list(self.ynab_client.all_budgets.keys())[0]
             ]
         else:
-            # if no budget id is found in the secrets file, and there is more than one budget prompt the user to select one
+            # if no budget id is found in the secrets file, and there is
+            # more than one budget prompt the user to select one
             self.console.print("[red]✘[/] No budget ID found on secrets file")
             self.ynab_client.prompt_user_for_budget_id()
 

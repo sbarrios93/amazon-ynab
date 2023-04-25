@@ -18,9 +18,8 @@ class YNABClient:
         self.token = token
         self.since_date = since_date
 
-        self.urls: dict[str, str] = {}
+        self.urls: dict[str, str] = {"base": "https://api.youneedabudget.com/v1"}
 
-        self.urls["base"] = "https://api.youneedabudget.com/v1"
         self.urls["budgets"] = self.urls["base"] + "/budgets"
         self.urls["transactions"] = self.urls["budgets"] + "/{}/transactions"
 
@@ -58,7 +57,7 @@ class YNABClient:
         """
         self._parse_budgets()
 
-    def prompt_user_for_budget_id(self):
+    def prompt_user_for_budget_id(self) -> None:
         """
         Prompts the user to select a budget.
         """
@@ -82,7 +81,7 @@ class YNABClient:
 
         console.print(Rule())
 
-    def _get_transactions(self) -> Any:
+    def _get_transactions(self):
         """
         Gets all transactions associated with the budget.
         """
@@ -91,9 +90,11 @@ class YNABClient:
 
         url = self.urls["transactions"].format(self.selected_budget)
         response = requests.get(url, headers=self.request_headers, params=params)
+        print(response.json())
         return response.json()["data"]["transactions"]
 
-    def _filter_transactions(self, transactions: Any) -> Any:
+    @staticmethod
+    def _filter_transactions(transactions: Any) -> Any:
         """
         Filters transactions by date.
         """
@@ -115,7 +116,7 @@ class YNABClient:
         search_by = re.compile(r"^.*Tips.*$", re.IGNORECASE)
 
         for transaction in self._filter_transactions(self._get_transactions()):
-            # lets isolate the tip transactions
+            # let's isolate the tip transactions
             if search_by.match(transaction["payee_name"]):
                 self.tip_transactions[transaction["id"]] = {
                     "amount": transaction["amount"],

@@ -3,8 +3,8 @@
     <component name="ProjectModuleManager">
         <modules>
             <module
-                fileurl="file://$PROJECT_DIR$/.idea/amazon_ynab.iml"
-                filepath="$PROJECT_DIR$/.idea/amazon_ynab.iml"
+                fileurl="file://$PROJECT_DIR$/.idea/amazon-ynab.iml"
+                filepath="$PROJECT_DIR$/.idea/amazon-ynab.iml"
             />
         </modules>
     </component>

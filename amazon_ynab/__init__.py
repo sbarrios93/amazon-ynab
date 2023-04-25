@@ -1,6 +1,6 @@
-"""Amazon YNAB is a reconciler that scrapes Amazon orders and adds memo info on each corresponding YNAB transaction"""
+"""Amazon YNAB is a reconciler that scrapes Amazon orders and
+adds memo info on each corresponding YNAB transaction"""
 
-import sys
 from importlib import metadata as importlib_metadata
 
 

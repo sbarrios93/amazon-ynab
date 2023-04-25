@@ -6,6 +6,7 @@ https://github.com/davidz627/AmazonSyncForYNAB/
 
 import re
 from datetime import date, datetime
+from typing import Pattern
 
 import bs4
 from bs4 import BeautifulSoup as bs
@@ -66,7 +67,6 @@ class TransactionInvoice:
             self.item_list = list(map(lambda x: x[0], self.item_tuples))
 
     def _parse_pre_tax_total(self) -> None:
-
         search_by = re.compile("Total before tax")
 
         pre_tax_total_element = not_none(
@@ -99,8 +99,7 @@ class TransactionInvoice:
         self.tax_total = tax_total_value
 
     def _parse_after_tax_total(self) -> None:
-
-        search_by = re.compile(r"Estimated tax to be collected")
+        search_by: Pattern[str] = re.compile(r"Estimated tax to be collected")
 
         tax_total_element = not_none(
             not_none(
@@ -115,15 +114,17 @@ class TransactionInvoice:
         self.tax_total = tax_total_value
 
     def _calculate_tax_rate(self) -> None:
-
         if self.pre_tax_total is not None and self.tax_total is not None:
             self.tax_rate = self.tax_total / self.pre_tax_total
 
     def _parse_payment_date(self) -> None:
-
         search_by = re.compile(r"Credit Card transactions")
 
-        # this is a little bit hacky, but when we have more than one transaction, we want the one that matches the payment we have from self.total_amount_paid. To do this, I look for that value on the credit card transactions of the invoice, and then the <td> elemenet before that contains the date
+        # this is a little bit hacky, but when we have more than one transaction,
+        # we want the one that matches the payment we have from self.total_amount_paid.
+        # To do this, I look for that value on the credit card transactions of the
+        # invoice, and then the <td> element before that contains the date
+        # TODO: this is not working for some reason when the transaction was a gift card
         search_in_block = not_none(
             not_none(
                 not_none(

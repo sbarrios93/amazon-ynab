@@ -10,11 +10,12 @@ from amazon_ynab.paths.utils import check_if_path_exists
 from amazon_ynab.utils import utils
 
 PATHS: dict[str, str] = get_paths()
-
-
 app: typer.Typer = typer.Typer(
     name="amazon-ynab",
-    help="Amazon YNAB is a reconciler that scrapes Amazon orders and adds memo info on each corresponding YNAB transaction",
+    help=(
+        "Amazon YNAB is a reconciler that scrapes Amazon orders and adds memo info on"
+        " each corresponding YNAB transaction"
+    ),
     add_completion=False,
 )
 console = Console()
@@ -42,7 +43,8 @@ def init_app(
     if restart:
         # show warning, prompt user to confirm they want to overwrite the secrets file
         console.print(
-            f"[yellow]WARNING:[/] This will overwrite the secrets file at {path_to_secrets}"
+            "[yellow]WARNING:[/] This will overwrite the secrets file at"
+            f" {path_to_secrets}"
         )
         confirm = typer.confirm("Are you sure you want to overwrite the secrets file?")
         if confirm:
@@ -81,17 +83,17 @@ def run(  # noqa
         help="Number of words to show per item [Only used when --short-items is set]",
     ),
 ) -> None:
-
     if not check_if_path_exists(path_to_secrets):
         console.print(
-            "[red]✘[/] Secrets file does not exist, either run the init command or create the secrets file manually. Paths are defined in the paths.yml file."
+            "[red]✘[/] Secrets file does not exist, either run the init command or"
+            " create the secrets file manually. Paths are defined in the paths.yml"
+            " file."
         )
         raise typer.Exit()
 
-    secrets: dict[str, dict[str, str]] = utils.load_secrets(path_to_secrets)
-
+    secrets = utils.load_secrets(path_to_secrets)
     # parse days back to a datetime date
-    cutoff_date: datetime = utils.days_back_to_cutoff_date(days_back)
+    cutoff_date = utils.days_back_to_cutoff_date(days_back)
 
     engine = Engine(
         secrets=secrets,

@@ -12,7 +12,6 @@ def patcher(
     payee_id: str,
     payee_name: str,
 ) -> None:
-
     transactions: list[dict[str, Any]] = []
 
     for amazon_transaction_id, ynab_transaction_id in matched_transactions:
@@ -37,7 +36,6 @@ def patcher(
 
 def tips_patcher(ynab_client: YNABClient, payee_id: str, payee_name: str) -> None:
     transactions: list[dict[str, Any]] = []
-
     for transaction_id, _ in ynab_client.tip_transactions.items():
         transactions_element = {
             "id": transaction_id,

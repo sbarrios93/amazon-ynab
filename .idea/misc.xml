@@ -3,7 +3,7 @@
     <component
         name="ProjectRootManager"
         version="2"
-        project-jdk-name="Python 3.10 (amazon-ynab)"
+        project-jdk-name="Python 3.11 (amazon-ynab)"
         project-jdk-type="Python SDK"
     />
 </project>

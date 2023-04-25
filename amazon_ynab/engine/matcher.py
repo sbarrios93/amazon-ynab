@@ -18,20 +18,19 @@ def match_transactions(
     Matches the transactions between amazon and ynab.
     """
 
-    transaction_candiates_for_amount = []
-    transaction_candiates_for_date = []
+    transaction_candidates_for_amount = []
+    transaction_candidates_for_date = []
 
     for amazon_transaction_id, amazon_invoice in amazon_transactions.items():
         for ynab_transaction_id, ynab_transaction_details in ynab_transactions.items():
             if amazon_invoice.total_amount_paid is None:
                 pass
             else:
-
                 # check matching values
                 if float(
                     ynab_transaction_details["amount"] / ynab_amount_multiplier
                 ) == float(amazon_invoice.total_amount_paid):
-                    transaction_candiates_for_amount.append(
+                    transaction_candidates_for_amount.append(
                         (amazon_transaction_id, ynab_transaction_id)
                     )
 
@@ -50,13 +49,13 @@ def match_transactions(
                         )
                         <= timedelta(timedelta_upper_bound)
                     ):
-                        transaction_candiates_for_date.append(
+                        transaction_candidates_for_date.append(
                             (amazon_transaction_id, ynab_transaction_id)
                         )
     matches = [
         (amazon, ynab)
-        for (amazon, ynab) in transaction_candiates_for_amount
-        if (amazon, ynab) in transaction_candiates_for_date
+        for (amazon, ynab) in transaction_candidates_for_amount
+        if (amazon, ynab) in transaction_candidates_for_date
     ]
 
     return matches

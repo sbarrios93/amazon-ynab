@@ -32,8 +32,7 @@ class AmazonClient:
         short_items: bool,
         words_per_item: int,
     ):  # noqa
-        # TODO: check if anything different is needed for running on raspberry pi, jetson nano
-
+        # TODO: check if anything different is needed for running on raspberry pi,jetson nano
         self.user_email = user_credentials[0]
         self.user_password = user_credentials[1]
         self.run_headless = run_headless
@@ -48,13 +47,15 @@ class AmazonClient:
         self.urls: dict[str, str] = {
             "homepage": "https://amazon.com",
             "transactions": "https://www.amazon.com/cpe/yourpayments/transactions",
-            "invoice": "https://www.amazon.com/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o00?ie=UTF8&orderID={}",
+            "invoice": (
+                "https://www.amazon.com/gp/css/summary/print.html/"
+                "ref=ppx_yo_dt_b_invoice_o00?ie=UTF8&orderID={}"
+            ),
         }
 
         self.invoices: AmazonInvoicesDict = {}
 
     def _start_driver(self) -> None:
-
         Console().print("Starting driver...")
 
         options = ChromeOptions()
@@ -101,17 +102,17 @@ class AmazonClient:
         self.driver.find_element("id", "signInSubmit").click()
 
     def _get_raw_transactions(self) -> None:
-
         self.driver.get(self.urls["transactions"])
 
-        inside_time_frame: bool = True
-        while inside_time_frame:
-
+        while True:
             transaction_divs = self.wait_driver.until(
                 EC.presence_of_all_elements_located(
                     (
                         By.XPATH,
-                        '//div[@class="a-section a-spacing-base apx-transactions-line-item-component-container"]',
+                        (
+                            '//div[@class="a-section a-spacing-base'
+                            ' apx-transactions-line-item-component-container"]'
+                        ),
                     )
                 )
             )
@@ -122,12 +123,15 @@ class AmazonClient:
                 )
             )
 
-            self.raw_transaction_data += transaction_texts
-
-            # now we need to check the dates of the transactions of the last page, and if they are older than the cutoff date, we need stop the loop
+            # now we need to check the dates of the transactions
+            # of the last page, and if they are older than the cutoff date,
+            # we need stop the loop
             dates_divs = self.driver.find_elements(
                 "xpath",
-                '//div[contains(@class,"a-section a-spacing-base a-padding-base apx-transaction-date-container")]',
+                (
+                    '//div[contains(@class,"a-section a-spacing-base a-padding-base'
+                    ' apx-transaction-date-container")]'
+                ),
             )
 
             transaction_dates_texts = list(
@@ -141,12 +145,11 @@ class AmazonClient:
                 )
             )
 
-            if min(transaction_dates) < self.cutoff_date:
-                inside_time_frame = False
-            else:  # if the last transaction is not older than the cutoff date, we need to click the next button unless is the last page
-                if "end of the line" in self.driver.page_source:
-                    break
-
+            if max(transaction_dates) < self.cutoff_date or (
+                "end of the line" in self.driver.page_source
+            ):
+                break
+            else:
                 pagination_elem = self.wait_driver.until(
                     EC.element_to_be_clickable(
                         (
@@ -156,13 +159,52 @@ class AmazonClient:
                     )
                 )
 
+                # cutoff date might be in the middle of the page, so we need to count
+                # how many transactions are older than the cutoff date, and then
+                # only parse those
+                date_containers = self.driver.find_elements(
+                    By.CSS_SELECTOR, ".apx-transaction-date-container"
+                )
+
+                dates = []
+                for date_container in date_containers:
+                    # Extract the date from the current container
+                    date = datetime.strptime(
+                        date_container.find_element(By.CSS_SELECTOR, "span").text,
+                        "%B %d, %Y",
+                    )
+
+                    # Get the number of transactions under the current date container
+                    transaction_count = len(
+                        date_container.find_elements(
+                            By.XPATH,
+                            (
+                                "following-sibling::*[1]//div[contains(@class,"
+                                " 'apx-transactions-line-item-component-container')]"
+                            ),
+                        )
+                    )
+                    # Add the date to the list once for each transaction
+                    dates.extend([date] * transaction_count)
+
+                transactions_to_count: int = len(
+                    list(
+                        filter(
+                            lambda date: date > self.cutoff_date,
+                            dates,
+                        )
+                    )
+                )
+
+                self.raw_transaction_data += transaction_texts[:transactions_to_count]
+
                 pagination_elem.click()
                 time.sleep(randint(200, 350) / 100.0)
 
+    @staticmethod
     def _transaction_to_dict(
-        self, transaction: list[str]
+        transaction: list[str],
     ) -> tuple[str, AmazonInnerTransactionsDict]:
-
         payment_type: str = (
             "Gift Card" if "Gift Card" in transaction[0] else "Credit Card"
         )
@@ -180,7 +222,6 @@ class AmazonClient:
         }
 
     def _parse_raw_transactions(self) -> None:
-
         transactions: list[list[str]] = [
             tx.split("\n") for tx in self.raw_transaction_data
         ]
@@ -190,8 +231,10 @@ class AmazonClient:
             if order_info["is_tip"]:  # dont parse tip orders
                 pass
             else:
-                # some transactions can be paid with more than one type of payment type, lets look if the order number
-                # already exists, meaning that there are multiple entries for the same order, if not, then add a new entry
+                # some transactions can be paid with more than one type of payment type,
+                # lets look if the order number
+                # already exists, meaning that there are multiple entries for the same
+                # order, if not, then add a new entry
                 if self.transactions.get(order_number, None) is None:
                     self.transactions[order_number] = order_info
                 else:
@@ -207,7 +250,6 @@ class AmazonClient:
         return self.driver.page_source
 
     def _process_invoices(self) -> None:
-
         with Progress(
             SpinnerColumn(),
             *Progress.get_default_columns(),
@@ -221,7 +263,7 @@ class AmazonClient:
             )
 
             for order_number in self.transactions:
-                # dont parse amazon transactions that are not products
+                # don't parse amazon transactions that are not products
                 # this could be an amazon prime payment or other type of payment
                 # this order ids usually start with a letter instead of a number
 
@@ -231,7 +273,8 @@ class AmazonClient:
                     )
                 else:
                     progress.print(f"[green]{order_number}[/]")
-                    # we only care about what we paid with credit/debit card, not with gift card
+                    # we only care about what we paid with
+                    # credit/debit card, not with gift card
                     if (
                         self.transactions[order_number]["payments"].get(
                             "Credit Card", None
@@ -250,14 +293,16 @@ class AmazonClient:
                         )
                     else:
                         progress.print(
-                            f"[yellow]{order_number} is not a credit card transaction[/]"
+                            f"[yellow]{order_number} is not a credit card"
+                            " transaction[/]"
                         )
                         for payment_type, amount in self.transactions[order_number][
                             "payments"
                         ].items():
                             if amount is not None:
                                 progress.print(
-                                    f"[yellow]Order got a {payment_type} payment of {amount}[/]"
+                                    f"[yellow]Order got a {payment_type} payment of"
+                                    f" {amount}[/]"
                                 )
 
                 progress.update(processing_tasks, advance=1)

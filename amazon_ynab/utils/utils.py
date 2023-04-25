@@ -11,7 +11,6 @@ T = TypeVar("T")
 
 
 def create_secrets_file(path: str | pathlib.Path) -> None:
-
     console = Console()
     # create the secrets file
     amazon_username = typer.prompt("Amazon email: ")
@@ -43,7 +42,6 @@ def create_secrets_file(path: str | pathlib.Path) -> None:
 
 
 def load_secrets(path: str | pathlib.Path) -> dict[str, dict[str, str]]:
-
     with open(path, encoding="utf-8") as secrets_file:
         secrets: dict[str, dict[str, str]] = yaml.load(
             secrets_file, Loader=yaml.SafeLoader
@@ -66,7 +64,6 @@ def not_none(obj: T | None, *, message: str | None = None) -> T:
 
 
 def days_back_to_cutoff_date(days_back: int) -> datetime:
-
     cutoff_date = datetime.today() - timedelta(days=days_back)
 
     return cutoff_date

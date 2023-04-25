@@ -1,0 +1,6 @@
+<component name="DependencyValidationManager">
+    <scope
+        name="project"
+        pattern="file[amazon-ynab]:*/&amp;&amp;!file[amazon-ynab]:.mypy_cache//*&amp;&amp;!file[amazon-ynab]:.pytest_cache//*&amp;&amp;!file[amazon-ynab]:.ruff_cache//*"
+    />
+</component>
