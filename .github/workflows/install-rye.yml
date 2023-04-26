@@ -1,0 +1,17 @@
+name: Install Rye from Cargo
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  rye_install:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Rye install"
+      - name: Check out repository
+        uses: actions/checkout@v3

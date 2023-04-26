@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import typer
 from rich.console import Console
 

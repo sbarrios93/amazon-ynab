@@ -24,31 +24,18 @@ repos:
           - "@prettier/plugin-xml@2.1.0"
         args:
           - --plugin=@prettier/plugin-xml
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    # Ruff version.
+    rev: "v0.0.263"
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
   - repo: local
     hooks:
-      - id: autoflake
-        name: autoflake
-        entry: poetry run autoflake
-        language: system
-        types: [python]
-        require_serial: true
-        args:
-          - --in-place
-          - --expand-star-imports
-          - --ignore-init-module-imports
-          - --remove-all-unused-imports
-          - --remove-duplicate-keys
-          - --remove-unused-variables
-      - id: pyupgrade
-        name: pyupgrade
-        description: Automatically upgrade syntax for newer versions.
-        entry: poetry run pyupgrade
-        language: system
-        types: [python]
       - id: black
         name: black
         description: "Black: The uncompromising Python code formatter"
-        entry: poetry run black
+        entry: rye run black
         language: system
         minimum_pre_commit_version: 2.9.2
         require_serial: true
@@ -56,51 +43,10 @@ repos:
       - id: blacken-docs
         name: blacken-docs
         description: Run `black` on python code blocks in documentation files
-        entry: poetry run blacken-docs
+        entry: rye run blacken-docs
         language: system
         files: '\.(rst|md|markdown|py|tex)$'
-      - id: isort
-        name: isort
-        entry: poetry run isort
-        require_serial: true
-        language: system
-        types_or: [cython, pyi, python]
-        minimum_pre_commit_version: "2.9.2"
-        args:
-          - --filter-files
-          - --settings=.
-      - &flake8
-        id: flake8
-        name: flake8 except __init__.py
-        description:
-          "`flake8` is a command-line utility for enforcing style consistency across
-          Python projects."
-        entry: poetry run flake8
-        language: system
-        types: [python]
-        require_serial: true
-        exclude: /__init__\.py$
-      - <<: *flake8
-        name: flake8 for __init__.py
-        args:
-          # ignore unused imports in __init__.py
-          - --extend-ignore=F401
-        files: /__init__\.py$
-      - id: poetry-check
-        name: poetry-check
-        description: run poetry check to validate config
-        entry: poetry check
-        language: system
-        pass_filenames: false
-        files: ^pyproject.toml$
-      - id: commitizen
-        name: commitizen check
-        description: "Check whether the commit message follows commiting rules"
-        entry: poetry run cz check --commit-msg-file
-        language: system
-        require_serial: true
-        stages: [commit-msg]
-        minimum_pre_commit_version: "0.15.4"
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.2.0
     hooks:

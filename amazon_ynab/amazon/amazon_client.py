@@ -32,7 +32,6 @@ class AmazonClient:
         short_items: bool,
         words_per_item: int,
     ):  # noqa
-        # TODO: check if anything different is needed for running on raspberry pi,jetson nano
         self.user_email = user_credentials[0]
         self.user_password = user_credentials[1]
         self.run_headless = run_headless

@@ -11,7 +11,7 @@ dependencies = [
     "nltk~=3.8.1",
     "selenium~=4.9.0",
     "webdriver-manager~=3.8.6",
-    "typer[all]~=0.7.0",
+    "typer~=0.7.0",
     "rich~=12.6.0",
     "pyyaml~=6.0",
 ]
@@ -23,8 +23,9 @@ dev-dependencies = [
     "types-selenium~=3.141.9",
     "pyright~=1.1.304",
     "ruff~=0.0.262",
-    "pytest~=7.3.1",
+    "pytest~=7.3.1", "commitizen~=3.1.0", "blacken-docs~=1.13.0",
 ]
+managed = true
 
 
 [build-system]

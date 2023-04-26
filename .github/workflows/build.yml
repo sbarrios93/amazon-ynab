@@ -11,32 +11,49 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4.3.0
-        with:
-          python-version: ${{ matrix.python-version }}
 
-      - name: Install poetry
-        run: make poetry-download
+      - name: Update local toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Toolchain info
+        run: |
+          cargo --version --verbose
+          rustc --version
+
+      - name: Get Rye commit hash
+        id: rye-commit-hash
+        run: |
+          echo "::set-output name=hash::$(git ls-remote https://github.com/mitsuhiko/rye.git HEAD | cut -f 1)"
+
+      - name: Set up Rye cache
+        uses: actions/cache@v3.3.1
+        with:
+          path: ~/.cargo/bin/rye
+          key:
+            rye-cargo-${{ runner.os }}-stable-${{ steps.rye-commit-hash.outputs.hash }}
+
+      - name: Install Rye
+        run: cargo install --git https://github.com/mitsuhiko/rye rye
+
+      - name: Set up Python ${{ matrix.python-version }}
+        run: rye pin ${{ matrix.python-version }}
 
       - name: Set up cache
-        uses: actions/cache@v3.0.11
+        uses: actions/cache@v3.3.1
         with:
           path: .venv
           key:
             venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{
-            hashFiles('poetry.lock') }}
+            hashFiles('requirements.lock') }}-${{ hashFiles('requirements-dev.lock') }}-
+
       - name: Install dependencies
         run: |
-          poetry config virtualenvs.in-project true
-          poetry install
+          rye sync
 
       - name: pre-commit
-        uses: pre-commit/action@v3.0.0
-
-      - name: Run style checks
         run: |
-          make check-codestyle
+          rye install pre-commit
+          pre-commit run --all-files --show-diff-on-failure --color always
 
       - name: Run tests
         run: |
