@@ -7,17 +7,65 @@ PYTHONPATH := `pwd`
 IMAGE := amazon_ynab
 VERSION := latest
 
+#* Poetry
+.PHONY: poetry-download
+poetry-download:
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | $(PYTHON) -
+
+.PHONY: poetry-remove
+poetry-remove:
+	curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | $(PYTHON) - --uninstall
+
+#* Installation
+.PHONY: install
+install:
+	poetry lock -n && poetry export --without-hashes > requirements.txt
+	poetry install -n
+	-poetry run mypy --install-types --non-interactive ./
+
+.PHONY: pre-commit-install
+pre-commit-install:
+	poetry run pre-commit install
+
+#* Formatters
+.PHONY: codestyle
+codestyle:
+	poetry run pyupgrade --exit-zero-even-if-changed --py39-plus **/*.py
+	poetry run isort --settings-path pyproject.toml ./
+	poetry run black --config pyproject.toml ./
+
+.PHONY: formatting
+formatting: codestyle
+
 #* Linting
 .PHONY: test
 test:
-	PYTHONPATH=$(PYTHONPATH) rye run pytest -c pyproject.toml --cov-report=html --cov=amazon_ynab tests/
-	rye run coverage-badge -o assets/images/coverage.svg -f
+	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=amazon_ynab tests/
+	poetry run coverage-badge -o assets/images/coverage.svg -f
+
+.PHONY: check-codestyle
+check-codestyle:
+	poetry run isort --diff --check-only --settings-path pyproject.toml ./
+	poetry run black --diff --check --config pyproject.toml ./
+	poetry run darglint --verbosity 2 amazon_ynab tests
+
+.PHONY: mypy
+mypy:
+	poetry run mypy --config-file pyproject.toml ./
 
 .PHONY: check-safety
 check-safety:
-	rye run safety check --full-report
-	rye run bandit -ll --recursive amazon_ynab tests
+	poetry check
+	poetry run safety check --full-report
+	poetry run bandit -ll --recursive amazon_ynab tests
 
+.PHONY: lint
+lint: test check-codestyle mypy check-safety
+
+.PHONY: update-dev-deps
+update-dev-deps:
+	poetry add -D bandit@latest darglint@latest "isort[colors]@latest" mypy@latest pre-commit@latest pydocstyle@latest pylint@latest pytest@latest pyupgrade@latest safety@latest coverage@latest coverage-badge@latest pytest-html@latest pytest-cov@latest
+	poetry add -D --allow-prereleases black@latest
 
 #* Docker
 # Example: make docker-build VERSION=latest
