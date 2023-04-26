@@ -1,8 +1,7 @@
-from typing import Any
-
 import json
 import re
 from datetime import datetime
+from typing import Any
 
 import requests
 from rich.console import Console
@@ -17,6 +16,7 @@ class YNABClient:
     def __init__(self, token: str, since_date: datetime) -> None:
         self.token = token
         self.since_date = since_date
+        self.request_timeout: int = 30
 
         self.urls: dict[str, str] = {"base": "https://api.youneedabudget.com/v1"}
 
@@ -40,7 +40,9 @@ class YNABClient:
         Gets all budgets associated with the user's account.
         """
         url = self.urls["budgets"]
-        response = requests.get(url, headers=self.request_headers)
+        response = requests.get(
+            url, headers=self.request_headers, timeout=self.request_timeout
+        )
         return response.json()["data"]["budgets"]
 
     def _parse_budgets(self) -> None:
@@ -89,7 +91,12 @@ class YNABClient:
         params: dict[str, str] = {"since_date": self.since_date.strftime("%Y-%m-%d")}
 
         url = self.urls["transactions"].format(self.selected_budget)
-        response = requests.get(url, headers=self.request_headers, params=params)
+        response = requests.get(
+            url,
+            headers=self.request_headers,
+            params=params,
+            timeout=self.request_timeout,
+        )
         print(response.json())
         return response.json()["data"]["transactions"]
 
@@ -142,6 +149,7 @@ class YNABClient:
             self.urls["transactions"].format(self.selected_budget),
             data=data,
             headers=self.request_headers,
+            timeout=self.request_timeout,
         )
         if resp.status_code != 200:
             print(f"Something went wrong, got response: {str(resp.content)}")

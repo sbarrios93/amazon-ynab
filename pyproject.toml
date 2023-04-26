@@ -23,7 +23,13 @@ dev-dependencies = [
     "types-selenium~=3.141.9",
     "pyright~=1.1.304",
     "ruff~=0.0.262",
-    "pytest~=7.3.1", "commitizen~=3.1.0", "blacken-docs~=1.13.0", "pre-commit~=3.2.2",
+    "pytest~=7.3.1",
+    "blacken-docs~=1.13.0",
+    "safety~=2.3.4",
+    "bandit~=1.7.5",
+    "pre-commit~=3.2.2",
+    "pytest-cov~=4.0.0",
+    "coverage-badge~=1.1.0",
 ]
 managed = true
 
@@ -37,7 +43,7 @@ build-backend = "hatchling.build"
 # https://github.com/psf/black
 color = true
 line-length = 88
-target-version = ["py311"]
+target-version = ["py310"]
 exclude = '''
 /(
     \.git
