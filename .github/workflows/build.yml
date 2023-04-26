@@ -52,7 +52,6 @@ jobs:
 
       - name: pre-commit
         run: |
-          rye install pre-commit
           pre-commit run --all-files --show-diff-on-failure --color always
 
       - name: Run tests
