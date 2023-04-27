@@ -27,12 +27,14 @@ jobs:
 
       - name: Set up Rye cache
         uses: actions/cache@v3.3.1
+        id: rye-cache
         with:
           path: ~/.cargo/bin/rye
           key:
             rye-cargo-${{ runner.os }}-stable-${{ steps.rye-commit-hash.outputs.hash }}
 
       - name: Install Rye
+        if: steps.rye-cache.outputs.cache-hit != 'true'
         run: cargo install --git https://github.com/mitsuhiko/rye rye
 
       - name: Set up Python ${{ matrix.python-version }}
@@ -40,6 +42,7 @@ jobs:
 
       - name: Set up cache
         uses: actions/cache@v3.3.1
+        id: venv-cache
         with:
           path: .venv
           key:
