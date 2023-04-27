@@ -12,3 +12,9 @@ def test_version_callback() -> None:
 
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
+
+
+def test_init_callback() -> None:
+    """Test the help callback."""
+    result = runner.invoke(app, ["--help"])
+    assert result.exit_code == 0
