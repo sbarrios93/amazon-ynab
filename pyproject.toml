@@ -61,6 +61,28 @@ exclude = '''
 '''
 preview = true
 
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = [
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "W",   # pycodestyle
+    "B",   # flake8-bugbear
+    "I",   # isort
+    "PL",  # pylint
+    "RUF", # Ruff-specific rules
+    "UP",  # pyupgrade
+    "S",   # flake8-bandit
+    "A",   # flake8-builtins3
+    "T10", # flake8-debugger
+]
+# Old Flake8 ignores for Ruff (enable if needed?)
+# ignore = ["E203", "E501"]
+
+[tool.ruff.per-file-ignores]
+# Tests can use magic values, assertions, and relative imports
+"tests/*.py" = ["PLR2004", "S101", "TCH002"]
 
 [tool.pytest.ini_options]
 # https://docs.pytest.org/en/6.2.x/customize.html#pyproject-toml

@@ -4,9 +4,10 @@ https://github.com/davidz627/AmazonSyncForYNAB/
 """
 
 
+import contextlib
 import re
 from datetime import date, datetime
-from typing import Pattern
+from re import Pattern
 
 import bs4
 from bs4 import BeautifulSoup as bs
@@ -17,7 +18,7 @@ from amazon_ynab.words.string_modifier import shorten_string
 
 # from amazon_ynab.amazon.product_summarizer import shorten_string
 class TransactionInvoice:
-    def __init__(
+    def __init__(  # noqa: PLR0913 Too many arguments to function call
         self,
         invoice_number: str,
         transaction_page: str,
@@ -138,11 +139,10 @@ class TransactionInvoice:
         )[1].findAll("td")
 
         for ix, text_ in enumerate(search_in_block):
-            text_ = (
-                text_.text.strip().replace("$", "").replace(",", "")
-            )  # this is to clean the potential amount paid
-            try:
-                if float(text_) == abs(
+            # Clean the potential amount paid
+            cleaned_text = text_.text.strip().replace("$", "").replace(",", "")
+            with contextlib.suppress(ValueError):
+                if float(cleaned_text) == abs(
                     not_none(self.total_amount_paid)
                 ):  # self.total_amount_paid is negative
                     date_string: str = (
@@ -152,8 +152,6 @@ class TransactionInvoice:
                     self.payment_date = datetime.strptime(
                         date_string, "%B %d, %Y"
                     ).date()
-            except ValueError:
-                pass
 
     def _parse_orchestrator(self) -> None:
         self._parse_items()

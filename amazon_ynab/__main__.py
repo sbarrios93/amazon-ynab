@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import typer
 from rich.console import Console
 
@@ -28,12 +30,12 @@ def version_callback(print_version: bool) -> None:
 
 @app.command("init")
 def init_app(
-    path_to_secrets: str = typer.Option(
-        PATHS["SECRETS_PATH"], "--secrets", "-s", help="Path to secrets file"
-    ),
-    restart: bool = typer.Option(
-        False, "--restart", help="Force the recreation of the secrets file"
-    ),
+    path_to_secrets: Annotated[
+        str, typer.Option("--secrets", "-s", help="Path to secrets file")
+    ] = PATHS["SECRETS_PATH"],
+    restart: Annotated[
+        bool, typer.Option("--restart", help="Force the recreation of the secrets file")
+    ] = False,
 ) -> None:
     """Initialize the application."""
     console.print("Initializing the application...")
@@ -44,42 +46,45 @@ def init_app(
             "[yellow]WARNING:[/] This will overwrite the secrets file at"
             f" {path_to_secrets}"
         )
-        confirm = typer.confirm("Are you sure you want to overwrite the secrets file?")
-        if confirm:
+        if typer.confirm("Are you sure you want to overwrite the secrets file?"):
             console.print("[yellow]Overwriting the secrets file...[/]")
             utils.create_secrets_file(path_to_secrets)
         else:
             console.print("[red]Aborting...[/]")
             raise typer.Exit()
-    else:
+    elif check_if_path_exists(path_to_secrets):
         # check if file containing the secrets exists
-        if check_if_path_exists(path_to_secrets):
-            console.print("[green]✔[/] Secrets file exists")
-        else:
-            console.print("[red]✘[/] Secrets file does not exist, creating it...")
-            utils.create_secrets_file(path_to_secrets)
+        console.print("[green]✔[/] Secrets file exists")
+    else:
+        console.print("[red]✘[/] Secrets file does not exist, creating it...")
+        utils.create_secrets_file(path_to_secrets)
 
 
 @app.command("run")
-def run(  # noqa
-    path_to_secrets: str = typer.Option(
-        PATHS["SECRETS_PATH"], "--secrets", "-s", help="Path to secrets file"
-    ),
-    headless: bool = typer.Option(
-        False, "--headless", "-h", help="Run selenium in headless mode"
-    ),
-    days_back: int = typer.Option(
-        30, "--days-back", "-d", help="Number of days back to scrape"
-    ),
-    short_items: bool = typer.Option(
-        False, "--short-items", "-s", help="Shorten item names to fit in YNAB"
-    ),
-    words_per_item: int = typer.Option(
-        6,
-        "--words-per-item",
-        "-w",
-        help="Number of words to show per item [Only used when --short-items is set]",
-    ),
+def run(
+    path_to_secrets: Annotated[
+        str, typer.Option("--secrets", "-s", help="Path to secrets file")
+    ] = PATHS["SECRETS_PATH"],
+    headless: Annotated[
+        bool, typer.Option("--headless", "-h", help="Run selenium in headless mode")
+    ] = False,
+    days_back: Annotated[
+        int, typer.Option("--days-back", "-d", help="Number of days back to scrape")
+    ] = 30,
+    short_items: Annotated[
+        bool,
+        typer.Option("--short-items", "-s", help="Shorten item names to fit in YNAB"),
+    ] = False,
+    words_per_item: Annotated[
+        int,
+        typer.Option(
+            "--words-per-item",
+            "-w",
+            help=(
+                "Number of words to show per item [Only used when --short-items is set]"
+            ),
+        ),
+    ] = 6,
 ) -> None:
     if not check_if_path_exists(path_to_secrets):
         console.print(
@@ -117,7 +122,7 @@ def callback(
     )
 ) -> None:
     """Print the version of the package."""
-    pass  # noqa
+    pass
 
 
 if __name__ == "__main__":

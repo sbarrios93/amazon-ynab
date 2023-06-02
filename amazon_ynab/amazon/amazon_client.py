@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from random import randint
+from secrets import randbelow
 
 from rich.console import Console
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn, TimeElapsedColumn
@@ -24,14 +24,14 @@ from amazon_ynab.utils.custom_types import (
 
 
 class AmazonClient:
-    def __init__(
+    def __init__(  # noqa: PLR0913 Too many arguments to function call
         self,
         user_credentials: tuple[str, str],
         run_headless: bool,
         cutoff_date: datetime,
         short_items: bool,
         words_per_item: int,
-    ):  # noqa
+    ):
         self.user_email = user_credentials[0]
         self.user_password = user_credentials[1]
         self.run_headless = run_headless
@@ -198,7 +198,7 @@ class AmazonClient:
                 self.raw_transaction_data += transaction_texts[:transactions_to_count]
 
                 pagination_elem.click()
-                time.sleep(randint(200, 350) / 100.0)
+                time.sleep((randbelow(151) + 200) / 100.0)
 
     @staticmethod
     def _transaction_to_dict(
@@ -227,13 +227,12 @@ class AmazonClient:
 
         for transaction in transactions:
             order_number, order_info = self._transaction_to_dict(transaction)
-            if order_info["is_tip"]:  # dont parse tip orders
-                pass
-            else:
-                # some transactions can be paid with more than one type of payment type,
-                # lets look if the order number
-                # already exists, meaning that there are multiple entries for the same
-                # order, if not, then add a new entry
+            # dont parse tip orders
+            if not order_info["is_tip"]:
+                # some transactions can be paid with more than one type of payment
+                # type, lets look if the order number already exists, meaning that
+                # there are multiple entries for the same order, if not, then add a new
+                # entry
                 if self.transactions.get(order_number, None) is None:
                     self.transactions[order_number] = order_info
                 else:
@@ -245,7 +244,7 @@ class AmazonClient:
 
     def _get_invoice_page(self, order_number: str) -> str:
         self.driver.get(self.urls["invoice"].format(order_number))
-        time.sleep(randint(50, 200) / 100.0)
+        time.sleep((randbelow(151) + 50) / 100.0)
         return self.driver.page_source
 
     def _process_invoices(self) -> None:
