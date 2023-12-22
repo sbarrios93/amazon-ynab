@@ -11,7 +11,7 @@ from amazon_ynab.ynab.ynab_client import YNABClient
 
 
 class Engine:
-    def __init__(  # noqa
+    def __init__(  # noqa: PLR0913 Too many arguments to function call
         self,
         secrets: dict[str, dict[str, str]],
         run_headless: bool,
@@ -69,10 +69,11 @@ class Engine:
             # if we only have one budget and no budget id, we can use that one
             self.console.print(
                 "[yellow]WARNING:[/] No budget ID found on secrets file, using the"
-                f" only budget ID found: {list(self.ynab_client.all_budgets.keys())[0]}"
+                " only budget ID found: "
+                f"{next(iter(self.ynab_client.all_budgets.keys()))}"
             )
             self.ynab_client.selected_budget = self.ynab_client.all_budgets[
-                list(self.ynab_client.all_budgets.keys())[0]
+                next(iter(self.ynab_client.all_budgets.keys()))
             ]
         else:
             # if no budget id is found in the secrets file, and there is

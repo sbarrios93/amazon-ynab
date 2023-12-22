@@ -51,17 +51,16 @@ def init_app(
         else:
             console.print("[red]Aborting...[/]")
             raise typer.Exit()
+    # check if file containing the secrets exists
+    elif check_if_path_exists(path_to_secrets):
+        console.print("[green]✔[/] Secrets file exists")
     else:
-        # check if file containing the secrets exists
-        if check_if_path_exists(path_to_secrets):
-            console.print("[green]✔[/] Secrets file exists")
-        else:
-            console.print("[red]✘[/] Secrets file does not exist, creating it...")
-            utils.create_secrets_file(path_to_secrets)
+        console.print("[red]✘[/] Secrets file does not exist, creating it...")
+        utils.create_secrets_file(path_to_secrets)
 
 
 @app.command("run")
-def run(  # noqa
+def run(
     path_to_secrets: str = typer.Option(
         PATHS["SECRETS_PATH"], "--secrets", "-s", help="Path to secrets file"
     ),
@@ -107,17 +106,17 @@ def run(  # noqa
 # add callback so we can access some options without using arguments
 @app.callback()
 def callback(
-    print_version: bool = typer.Option(  # noqa
+    print_version: bool = typer.Option(
         None,
         "-v",
         "--version",
         callback=version_callback,
         is_eager=True,
         help="Prints the version of the amazon-ynab package.",
-    )
+    ),
 ) -> None:
     """Print the version of the package."""
-    pass  # noqa
+    pass
 
 
 if __name__ == "__main__":

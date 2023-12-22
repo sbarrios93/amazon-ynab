@@ -22,8 +22,7 @@ def patcher(
 
         transactions_element = {
             "id": ynab_transaction_id,
-            # memo has a max limit of 200 characters
-            "memo": items_string[:190] + " | AMAZON",
+            "memo": f"{items_string[:190]} | AMAZON",
             "payee_id": payee_id,
             "payee_name": payee_name,
         }

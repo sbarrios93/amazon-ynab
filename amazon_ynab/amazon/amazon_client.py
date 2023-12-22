@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from random import randint
+from secrets import randbelow
 
 from rich.console import Console
 from rich.progress import MofNCompleteColumn, Progress, SpinnerColumn, TimeElapsedColumn
@@ -24,14 +24,14 @@ from amazon_ynab.utils.custom_types import (
 
 
 class AmazonClient:
-    def __init__(
+    def __init__(  # noqa: PLR0913 Too many arguments to function call
         self,
         user_credentials: tuple[str, str],
         run_headless: bool,
         cutoff_date: datetime,
         short_items: bool,
         words_per_item: int,
-    ):  # noqa
+    ):
         self.user_email = user_credentials[0]
         self.user_password = user_credentials[1]
         self.run_headless = run_headless
@@ -105,15 +105,13 @@ class AmazonClient:
 
         while True:
             transaction_divs = self.wait_driver.until(
-                EC.presence_of_all_elements_located(
+                EC.presence_of_all_elements_located((
+                    By.XPATH,
                     (
-                        By.XPATH,
-                        (
-                            '//div[@class="a-section a-spacing-base'
-                            ' apx-transactions-line-item-component-container"]'
-                        ),
-                    )
-                )
+                        '//div[@class="a-section a-spacing-base'
+                        ' apx-transactions-line-item-component-container"]'
+                    ),
+                ))
             )
             transaction_texts = list(
                 map(
@@ -127,10 +125,8 @@ class AmazonClient:
             # we need stop the loop
             dates_divs = self.driver.find_elements(
                 "xpath",
-                (
-                    '//div[contains(@class,"a-section a-spacing-base a-padding-base'
-                    ' apx-transaction-date-container")]'
-                ),
+                '//div[contains(@class,"a-section a-spacing-base a-padding-base'
+                ' apx-transaction-date-container")]',
             )
 
             transaction_dates_texts = list(
@@ -150,12 +146,10 @@ class AmazonClient:
                 break
             else:
                 pagination_elem = self.wait_driver.until(
-                    EC.element_to_be_clickable(
-                        (
-                            By.XPATH,
-                            '//span[contains(text(), "Next Page")]//parent::span/input',
-                        )
-                    )
+                    EC.element_to_be_clickable((
+                        By.XPATH,
+                        '//span[contains(text(), "Next Page")]//parent::span/input',
+                    ))
                 )
 
                 # cutoff date might be in the middle of the page, so we need to count
@@ -177,10 +171,8 @@ class AmazonClient:
                     transaction_count = len(
                         date_container.find_elements(
                             By.XPATH,
-                            (
-                                "following-sibling::*[1]//div[contains(@class,"
-                                " 'apx-transactions-line-item-component-container')]"
-                            ),
+                            "following-sibling::*[1]//div[contains(@class,"
+                            " 'apx-transactions-line-item-component-container')]",
                         )
                     )
                     # Add the date to the list once for each transaction
@@ -198,7 +190,7 @@ class AmazonClient:
                 self.raw_transaction_data += transaction_texts[:transactions_to_count]
 
                 pagination_elem.click()
-                time.sleep(randint(200, 350) / 100.0)
+                time.sleep((randbelow(150) + 200) / 100.0)
 
     @staticmethod
     def _transaction_to_dict(
@@ -227,9 +219,8 @@ class AmazonClient:
 
         for transaction in transactions:
             order_number, order_info = self._transaction_to_dict(transaction)
-            if order_info["is_tip"]:  # dont parse tip orders
-                pass
-            else:
+            # dont parse tip orders
+            if not order_info["is_tip"]:
                 # some transactions can be paid with more than one type of payment type,
                 # lets look if the order number
                 # already exists, meaning that there are multiple entries for the same
@@ -245,7 +236,7 @@ class AmazonClient:
 
     def _get_invoice_page(self, order_number: str) -> str:
         self.driver.get(self.urls["invoice"].format(order_number))
-        time.sleep(randint(50, 200) / 100.0)
+        time.sleep((randbelow(150) + 50) / 100.0)
         return self.driver.page_source
 
     def _process_invoices(self) -> None:

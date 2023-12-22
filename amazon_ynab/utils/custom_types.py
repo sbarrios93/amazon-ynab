@@ -1,6 +1,5 @@
-from typing import TypedDict
-
 import datetime
+from typing import TypedDict
 
 from amazon_ynab.amazon.invoice_parser import TransactionInvoice
 

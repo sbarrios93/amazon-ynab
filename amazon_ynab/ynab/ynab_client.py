@@ -1,6 +1,7 @@
 import json
 import re
 from datetime import datetime
+from http import HTTPStatus
 from typing import Any
 
 import requests
@@ -67,7 +68,7 @@ class YNABClient:
 
         console.print(Rule(title="[bold]Select a budget from the list below:[/]"))
 
-        for num, (budget_name, budget_id) in enumerate(self.all_budgets.items()):
+        for num, (budget_name, _budget_id) in enumerate(self.all_budgets.items()):
             console.print(Markdown(f"{num + 1}. {budget_name}"))
 
         selected = int(
@@ -151,7 +152,7 @@ class YNABClient:
             headers=self.request_headers,
             timeout=self.request_timeout,
         )
-        if resp.status_code != 200:
-            print(f"Something went wrong, got response: {str(resp.content)}")
-        else:
+        if resp.status_code == HTTPStatus.OK:
             print(f"Successfully updated transactions {transactions}")
+        else:
+            print(f"Something went wrong, got response: {resp.content!s}")
