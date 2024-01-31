@@ -1,7 +1,6 @@
-from typing import TypeVar
-
 import pathlib
 from datetime import datetime, timedelta
+from typing import TypeVar
 
 import typer
 import yaml

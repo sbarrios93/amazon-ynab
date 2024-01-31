@@ -9,26 +9,26 @@ requires-python = ">=3.10.0,<4.0.0"
 dependencies = [
     "beautifulsoup4~=4.12.2",
     "nltk~=3.8.1",
-    "selenium~=4.9.0",
-    "webdriver-manager~=3.8.6",
-    "typer~=0.7.0",
-    "rich~=12.6.0",
-    "pyyaml~=6.0",
+    "selenium~=4.16.0",
+    "webdriver-manager~=4.0.1",
+    "typer~=0.9.0",
+    "rich~=13.7.0",
+    "pyyaml~=6.0.1",
 ]
 
 [tool.rye]
 dev-dependencies = [
-    "types-PyYAML~=6.0.12.9",
-    "black~=23.3.0",
+    "types-PyYAML~=6.0.12.12",
+    "black~=24.1a1",
     "types-selenium~=3.141.9",
-    "pyright~=1.1.304",
-    "ruff~=0.0.262",
-    "pytest~=7.3.1",
-    "blacken-docs~=1.13.0",
+    "pyright~=1.1.342",
+    "ruff~=0.1.9",
+    "pytest~=7.4.3",
+    "blacken-docs~=1.16.0",
     "safety~=2.3.4",
-    "bandit~=1.7.5",
-    "pre-commit~=3.2.2",
-    "pytest-cov~=4.0.0",
+    "bandit~=1.7.6",
+    "pre-commit~=3.6.0",
+    "pytest-cov~=4.1.0",
     "coverage-badge~=1.1.0",
 ]
 managed = true
@@ -61,6 +61,79 @@ exclude = '''
 '''
 preview = true
 
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = [
+    "F", # pyflakes
+    "E", # pycodestyle
+    "W", # pycodestyle
+    # "C90", # mccabe
+    "I", # isort
+    # "N",   # pep8-naming
+    # "D",   # pydocstyle
+    "UP", # pyupgrade
+    # "YTT", # flake8-2020
+    # "ANN", # flake8-annotations
+    # "ASYNC", # flake8-async
+    # "TRIO",  # flake8-trio
+    "S", # flake8-bandit
+    # "BLE", # flake8-blind-except
+    # "FBT", # flake8-boolean-trap
+    "B", # flake8-bugbear
+    "A", # flake8-builtins
+    # "COM", # flake8-commas
+    # "CPY",   # flake8-copyright
+    # "C4",  # flake8-comprehensions
+    # "DTZ", # flake8-datetimez
+    "T10", # flake8-debugger
+    # "DJ",  # flake8-django
+    # "EM",  # flake8-errmsg
+    # "EXE", # flake8-executable
+    # "FA",   # flake8-future-annotations
+    # "ISC", # flake8-implicit-str-concat
+    # "ICN", # flake8-import-conventions
+    # "G",   # flake8-logging-format
+    # "INP", # flake8-no-pep420
+    # "PIE", # flake8-pie
+    # "T20", # flake8-print
+    # "PYI", # flake8-pyi
+    # "PT",  # flake8-pytest-style
+    # "Q",   # flake8-quotes
+    # "RSE", # flake8-raise
+    # "RET", # flake8-return
+    # "SLF", # flake8-self
+    # "SLOT", # flake8-slots
+    # "SIM", # flake8-simplify
+    # "TID", # flake8-tidy-imports
+    # "TCH", # flake8-type-checking
+    # "INT",  # flake8-gettext
+    # "ARG", # flake8-unused-arguments
+    # "PTH", # flake8-use-pathlib
+    # "TD",   # flake8-todos
+    # "FIX",  # flake8-fixme
+    # "ERA", # eradicate
+    # "PD",  # pandas-vet
+    # "PGH", # pygrep-hooks
+    "PL", # Pylint
+    # "TRY", # tryceratops
+    # "FLY",  # flynt
+    # "NPY", # NumPy-specific rules
+    # "AIR",  # Airflow
+    # "PERF", # Perflint
+    # "FURB", # refurb
+    # "LOG",  # flake8-logging
+    # "PLR", # Refactor
+    # "PLE", # Error
+    "RUF", # Ruff-specific rules
+]
+# Old Flake8 ignores for Ruff (enable if needed?)
+# ignore = ["E203", "E501"]
+
+[tool.ruff.extend-per-file-ignores]
+"__init__.py" = ["F401"]
+# Tests can use magic values, assertions, and relative imports
+"tests/**/*" = ["PLR2004", "S101", "TID252"]
 
 [tool.pytest.ini_options]
 # https://docs.pytest.org/en/6.2.x/customize.html#pyproject-toml
@@ -93,5 +166,24 @@ addopts = [
 [tool.coverage.run]
 source = ["tests"]
 
+[tool.mypy]
+mypy_path = "typings"
+python_version = "3.10"
+warn_unused_configs = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+strict = true
+
 [tool.pyright]
 typeCheckingMode = "basic"
+exclude = [
+    "**/__pycache__",
+]
+stubPath = "typings"
+
+reportMissingImports = true
+reportMissingTypeStubs = true
+
+pythonVersion = "3.10"
